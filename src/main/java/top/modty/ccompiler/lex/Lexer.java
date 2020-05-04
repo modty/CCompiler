@@ -1,10 +1,12 @@
 package top.modty.ccompiler.lex;
 
-import top.modty.ccompiler.error.ErrorType;
-import top.modty.ccompiler.error.Errors;
+import top.modty.ccompiler.commons.constants.CTokenType;
+import top.modty.ccompiler.commons.Word;
+import top.modty.ccompiler.commons.constants.ErrorType;
+import top.modty.ccompiler.commons.error.Errors;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 
 /**
  * @author 点木
@@ -20,13 +22,23 @@ public class Lexer {
 
     private String input_buffer = "";
     private String current = "";
-    private HashMap<String, Integer> keywordMap = new HashMap<String, Integer>();
+    private HashMap<String, Integer> keywordMap = new HashMap<>();
+
 
     public Lexer(String current) {
         this.current=current;
         initKeyWordMap();
     }
-
+    public ArrayList<Word> getRecognizedMap(){
+        ArrayList<Word> recognizedList=new ArrayList<>();
+        Lexer lexer=new Lexer(current);
+        lexer.input_buffer=current;
+        while (lexer.position<lexer.input_buffer.length()){
+            lexer.advance();
+            recognizedList.add(new Word(lexer.yytext,lexer.position,lexer.lookAhead,CTokenType.getSymbolStr(lexer.lookAhead)));
+        }
+        return recognizedList;
+    }
     /**
      * @author 点木
      * @date 2020/5/3
@@ -87,27 +99,6 @@ public class Lexer {
     private int lex() {
 
         while (true) {
-            /*            从控制台输入
-            while (current == "") {
-                Scanner s = new Scanner(System.in);
-                while (true) {
-                    String line = s.nextLine();
-                    if (line.equals("end")) {
-                        break;
-                    }
-                    input_buffer += line;
-                }
-                s.close();
-
-                if (input_buffer.length() == 0) {
-                    current = "";
-                    return CTokenType.SEMI.ordinal();
-                }
-
-                current = input_buffer;
-                current.trim();
-            }
-*/
             if (current.isEmpty()) {
                 return CTokenType.SEMI.ordinal();
             }

@@ -1,13 +1,10 @@
-package top.modty.ccompiler.grammar.initial;
+package top.modty.ccompiler.grammar;
+import top.modty.ccompiler.commons.constants.CTokenType;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
-/**
- * @author 点木
- * @date 2020-05-03 18:20
- * @mes
- */
 public class CGrammarInitializer {
 	public static  final int TYPE_TO_TYPE_SPECIFIER = 11;
 	public static  final int SPECIFIERS_TypeOrClass_TO_SPECIFIERS = 9;
@@ -124,18 +121,25 @@ public class CGrammarInitializer {
 	public static final int Binary_DivOp_Binary_TO_Binary = 90;
 	//BINARY -> BINARY MINUS BINARY(95)
 	public static final int Binary_Minus_Binary_TO_Binary = 95;
+	//BINARY -> BINARY START BINARY (67)
+	public static final int Binary_Start_Binary_TO_Binary = 67;
 	//UNARY -> STAR UNARY 99
 	public static final int Start_Unary_TO_Unary = 99;
 	//UNARY -> UNARY STRUCTOP NAME 100
 	public static final int Unary_StructOP_Name_TO_Unary = 100;
 	
+	//DEF_LIST ->  DEF (28)
+	public static final int Def_To_DefList = 28;
+	
 	private int productionNum = 0;
+	
+	
 	
 	private static CGrammarInitializer instance = null;
 	private HashMap<Integer, ArrayList<Production>> productionMap = new HashMap<Integer, ArrayList<Production>>();
 	private HashMap<Integer, Symbols> symbolMap = new HashMap<Integer, Symbols>();
     private ArrayList<Symbols> symbolArray = new ArrayList<Symbols>();
-	public  static CGrammarInitializer getInstance() {
+	public  static CGrammarInitializer  getInstance() {
 		if (instance == null) {
 			instance = new CGrammarInitializer();
 		}
@@ -324,8 +328,7 @@ public class CGrammarInitializer {
     	
 		
 	}
-
-	// 解析函数声明
+	
 	private void initFunctionProductions() {
 		/*production num begin with 15
 		 * 
@@ -403,8 +406,7 @@ public class CGrammarInitializer {
 		addProduction(production, false);
 		
 	}
-
-	// 解析结构体
+	
 	private void initStructureProductions() {
 		/* production number begin from 23 
 		 * 
@@ -551,8 +553,7 @@ public class CGrammarInitializer {
         productionNum++;
         addProduction(production, false);
 	}
-
-	// 解析枚举
+	
 	private void initEmunProductions() {
 		/*
 		 * begin from production number 40
@@ -623,8 +624,7 @@ public class CGrammarInitializer {
 		
 				
 	}
-
-	// 解析函数定义
+	
     private void initFunctionDefinition() {
     	/*
     	 * begin production number 50
@@ -752,7 +752,7 @@ public class CGrammarInitializer {
     	addProduction(production, false);
     	
     }
-	//
+	
     private void initFunctionDefinition2() {
       //COMPOUND_STMT -> LC RC(69)
     	ArrayList<Integer> right = null;
@@ -769,7 +769,7 @@ public class CGrammarInitializer {
     	addProduction(production, false);
     	
     }
-	// 解析If-else
+
     private void initFunctionDefinitionWithIfElse() {
     	 //STATEMENT -> COMPOUND_STMT (71)
     	ArrayList<Integer> right = null;
@@ -825,7 +825,7 @@ public class CGrammarInitializer {
     	productionNum++;
     	addProduction(production, false);
     }
-	// 解析switch-case
+
     private void initFunctionDefinitionWithSwitchCase() {
     	 //STATEMENT -> SWITCH LP EXPR RP COMPOUND_STATEMENT (79)
     	ArrayList<Integer> right = null;
@@ -854,7 +854,7 @@ public class CGrammarInitializer {
     	productionNum++;
     	addProduction(production, false);
     }
-	// 解析循环for while do--while
+    
     private void initFunctionDefinitionWithLoop() {
     	 //STATEMENT -> WHILE LP TEST RP STATEMENT (83)
     	ArrayList<Integer> right = null;
