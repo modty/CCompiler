@@ -1,6 +1,6 @@
-package top.modty.ccompiler.error;
+package top.modty.ccompiler.commons.error;
 
-import org.apache.catalina.valves.ErrorReportValve;
+import top.modty.ccompiler.commons.constants.ErrorType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

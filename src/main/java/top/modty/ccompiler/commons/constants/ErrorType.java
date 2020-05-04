@@ -1,4 +1,4 @@
-package top.modty.ccompiler.error;
+package top.modty.ccompiler.commons.constants;
 
 /**
  * @author 点木

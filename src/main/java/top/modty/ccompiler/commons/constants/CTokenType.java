@@ -1,16 +1,10 @@
-package top.modty.ccompiler.grammar.initial;
-/**
- * @author 点木
- * @date 2020-05-03 18:20
- * @mes
- */
+package top.modty.ccompiler.commons.constants;
+
 public enum CTokenType {
 	
 	//非终结符
-
 	PROGRAM, EXT_DEF_LIST, EXT_DEF, OPT_SPECIFIERS, EXT_DECL_LIST,
 	EXT_DECL, VAR_DECL, SPECIFIERS,
-
 	TYPE_OR_CLASS, TYPE_NT,
 
 	/*struct定义*/
@@ -30,16 +24,15 @@ public enum CTokenType {
 	TYPE_SPECIFIER, NEW_NAME, NAME_NT,
 		
     //终结符
-	NAME, TYPE, STRUCT,CLASS, LP, RP, LB, RB,PLUS,LC,RC, NUMBER, STRING, QUEST, COLON,
-	RELOP, ANDAND, OR, AND, EQUOP, SHIFTOP, DIVOP, XOR, MINUS, INCOP, DECOP, STRUCTOP,
+	NAME/*标识符*/, TYPE/*char、float、double、int、long、short、void*/, STRUCT,CLASS/*auto、static、register*/, LP/*(*/, RP/*)*/, LB/*[*/, RB/*]*/,PLUS/*+*/,LC/*{*/,RC/*}*/, NUMBER, STRING/*""*/, QUEST/*?*/, COLON/*:*/,
+	//
+	RELOP/*==、<=、<、>*/, ANDAND, OR/*|*/, AND/*&*/, EQUOP, SHIFTOP/*>>、<<*/, DIVOP/*/、%*/, XOR/*^*/, MINUS/*-*/, INCOP/*++*/, DECOP/*--*/, STRUCTOP/*->、.*/,
 	
-	RETURN, IF, ELSE, SWITCH, CASE, DEFAULT, BREAK, WHILE, FOR, DO, CONTINUE, GOTO,
+	RETURN/*return*/, IF/*if*/, ELSE/*else*/, SWITCH/*switch*/, CASE/*case*/, DEFAULT/*default*/, BREAK/*break*/, WHILE/*while*/, FOR/*for*/, DO/*do*/, CONTINUE/*continue*/, GOTO/*goto*/,
 	
 	//枚举定义
-	ENUM, 
-
-	
-	COMMA, SEMI, WHITE_SPACE, EQUAL,TTYPE, STAR, UNKNOWN_TOKEN;
+	ENUM/*enum*/,
+	COMMA/*,*/, SEMI/*;*/, WHITE_SPACE/*\n、\t、 */, EQUAL/*=*/,TTYPE, STAR/***/, UNKNOWN_TOKEN/*未识别类型*/;
 	
 	
 	
@@ -57,7 +50,6 @@ public enum CTokenType {
 		if (FIRST_TERMINAL_INDEX <= val && val <= LAST_TERMINAL_INDEX) {
 			return true;
 		}
-		
 		return false;
 	}
 	
