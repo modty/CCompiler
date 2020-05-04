@@ -1,13 +1,11 @@
-package top.modty.ccompiler.grammar.initial;
+package top.modty.ccompiler.grammar;
+import top.modty.ccompiler.commons.constants.CTokenType;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-/**
- * @author 点木
- * @date 2020-05-03 18:20
- * @mes
- */
+
 public class FirstSetBuilder {
 	
     private HashMap<Integer, Symbols> symbolMap = new HashMap<Integer, Symbols>();
@@ -46,8 +44,8 @@ public class FirstSetBuilder {
     		
     	}
     	
-    	printAllFirstSet();
-		System.out.println("============");
+//    	printAllFirstSet();
+//		System.out.println("============");
     }
     
     private void addSymbolFirstSet(Symbols symbol) {

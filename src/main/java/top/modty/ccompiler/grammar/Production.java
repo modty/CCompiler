@@ -1,11 +1,9 @@
-package top.modty.ccompiler.grammar.initial;
+package top.modty.ccompiler.grammar;
+import top.modty.ccompiler.commons.constants.CTokenType;
+
 import java.util.ArrayList;
 
-/**
- * @author 点木
- * @date 2020-05-03 18:20
- * @mes
- */
+
 public class Production {
     private int dotPos = 0;
     private boolean printDot = false;
@@ -30,7 +28,7 @@ public class Production {
     
   
     public Production dotForward() {
-    	Production product = new Production(productionNum, this.left, dotPos+1, this.right);
+    	Production product = new Production(productionNum, this.left, dotPos+1, this.right); 
     	
     	product.lookAhead = new ArrayList<Integer>();
     	for (int i = 0; i < this.lookAhead.size(); i++) {
@@ -42,7 +40,7 @@ public class Production {
     
     public Production cloneSelf() {
     	
-        Production product = new Production(productionNum, this.left, dotPos, this.right);
+        Production product = new Production(productionNum, this.left, dotPos, this.right); 
     	
     	product.lookAhead = new ArrayList<Integer>();
     	for (int i = 0; i < this.lookAhead.size(); i++) {
@@ -96,7 +94,7 @@ public class Production {
     public void printBeta() {
     	System.out.print("Beta part of production is: ");
     	for (int i = dotPos + 1; i < right.size(); i++) {
-    		//System.out.print(top.dianmu.ccompiler.day34.top.dianmu.ccompiler.day36.top.dianmu.ccompiler.day38.top.dianmu.ccompiler.day40.top.dianmu.ccompiler.day52.Compiler.Compiler.top.dianmu.ccompiler.day40.top.dianmu.ccompiler.day52.Compiler.SymbolDefine.getSymbolStr(right.get(i)) + " ");
+    		//System.out.print(SymbolDefine.getSymbolStr(right.get(i)) + " ");
     		int val = right.get(i);
     		System.out.print(CTokenType.values()[val].toString());
     	}

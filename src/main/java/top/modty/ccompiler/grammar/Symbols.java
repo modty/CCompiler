@@ -1,11 +1,9 @@
-package top.modty.ccompiler.grammar.initial;
+package top.modty.ccompiler.grammar;
+import top.modty.ccompiler.commons.constants.CTokenType;
+
 import java.util.ArrayList;
 
-/**
- * @author 点木
- * @date 2020-05-03 18:20
- * @mes
- */
+
 public class Symbols {
     public  int value;
     public  ArrayList<int[]> productions;

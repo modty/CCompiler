@@ -1,13 +1,9 @@
-package top.modty.ccompiler.grammar.initial;
+package top.modty.ccompiler.grammar;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-/**
- * @author 点木
- * @date 2020-05-03 18:20
- * @mes
- */
+
 public class ProductionManager {
 	
 	private static ProductionManager self = null;

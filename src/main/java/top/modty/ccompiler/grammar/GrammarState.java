@@ -1,12 +1,13 @@
-package top.modty.ccompiler.grammar.initial;
+package top.modty.ccompiler.grammar;
+import top.modty.ccompiler.commons.constants.CTokenType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Stack;
 
-/**
- * @author 点木
- * @date 2020-05-03 18:20
- * @mes
- */
+
 public class GrammarState {
 	public static int stateNumCount = 0;
 	private boolean printInfo = false;
@@ -61,7 +62,7 @@ public class GrammarState {
     }
     
     public void printTransition() {
-    	for (Map.Entry<Integer, GrammarState> entry: transition.entrySet()) {
+    	for (Entry<Integer, GrammarState> entry: transition.entrySet()) {
     		System.out.println("transfter on " + CTokenType.getSymbolStr(entry.getKey()) + " to state ");
     		entry.getValue().print();
     		System.out.print("\n");
@@ -99,13 +100,13 @@ public class GrammarState {
     		Production production = productionStack.pop();
     		
     		
-    		System.out.println("\nproduction on top of stack is : ");
-    		production.print();
-    		production.printBeta();
+//    		System.out.println("\nproduction on top of stack is : ");
+//    		production.print();
+//    		production.printBeta();
     		
     		
     		if (CTokenType.isTerminal(production.getDotSymbol()) == true) {
-    			    System.out.println("symbol after dot is not non-terminal, ignore and prcess next item");
+//    			    System.out.println("symbol after dot is not non-terminal, ignore and prcess next item");
     			    continue;	
     			}
     		
@@ -123,16 +124,16 @@ public class GrammarState {
     			
     			
     			if (closureSet.contains(newProduct) == false) {  
-    				System.out.println("push and add new production to stack and closureSet");
+//    				System.out.println("push and add new production to stack and closureSet");
     				
     				closureSet.add(newProduct);
     				productionStack.push(newProduct);
-    				System.out.println("Add new production:");
-    				newProduct.print();
+//    				System.out.println("Add new production:");
+//    				newProduct.print();
     				removeRedundantProduction(newProduct);	
     			}
     			else {
-    				System.out.println("the production is already exist!");
+//    				System.out.println("the production is already exist!");
     			}
     			
     		}
@@ -208,7 +209,7 @@ public class GrammarState {
     		return;
     	}
     	
-    	for(Map.Entry<Integer, ArrayList<Production>> entry : partition.entrySet()) {
+    	for(Entry<Integer, ArrayList<Production>> entry : partition.entrySet()) {
     		
     		System.out.println("partition for symbol: " + CTokenType.getSymbolStr(entry.getKey()));
     		
@@ -233,12 +234,12 @@ public class GrammarState {
     
     private void makeTransition() {
     	
-    	for (Map.Entry<Integer, ArrayList<Production>> entry : partition.entrySet()) {
+    	for (Entry<Integer, ArrayList<Production>> entry : partition.entrySet()) {
     //		System.out.println("\n====begin print transition info ===");
     		GrammarState nextState = makeNextGrammarState(entry.getKey());
     		transition.put(entry.getKey(), nextState);
     	//	System.out.println("from state " + stateNum + " to State " + nextState.stateNum + " on " + 
-    	//	top.dianmu.ccompiler.day61.top.dianmu.ccompiler.day65.top.dianmu.ccompiler.day66.top.dianmu.ccompiler.day67.top.dianmu.ccompiler.day68.top.dianmu.ccompiler.day70.CTokenType.getSymbolStr(entry.getKey()));
+    	//	CTokenType.getSymbolStr(entry.getKey()));
     		//System.out.println("----State " + nextState.stateNum + "------");
     	//	nextState.print();
     		
@@ -249,7 +250,7 @@ public class GrammarState {
     }
     
     private void extendFollowingTransition() {
-    	for (Map.Entry<Integer, GrammarState> entry : transition.entrySet()) {
+    	for (Entry<Integer, GrammarState> entry : transition.entrySet()) {
     		GrammarState state = entry.getValue();
     		if (state.isTransitionMade() == false) {
     			state.createTransition();

@@ -1,14 +1,12 @@
-package top.modty.ccompiler.grammar.initial;
+package top.modty.ccompiler.grammar;
+import top.modty.ccompiler.commons.constants.CTokenType;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-/**
- * @author 点木
- * @date 2020-05-03 18:20
- * @mes
- */
+
 public class GrammarStateManager {
     private ArrayList<GrammarState> stateList = new ArrayList<GrammarState>();
     private ArrayList<GrammarState> compressedStateList = new ArrayList<GrammarState>();
@@ -131,7 +129,7 @@ public class GrammarStateManager {
     	/*
     	System.out.println("add transition from: ");
     	from.print();
-    	System.out.println("on: " + top.dianmu.ccompiler.day61.top.dianmu.ccompiler.day65.top.dianmu.ccompiler.day66.top.dianmu.ccompiler.day67.top.dianmu.ccompiler.day68.top.dianmu.ccompiler.day70.CTokenType.getSymbolStr(on) + " to : ");
+    	System.out.println("on: " + CTokenType.getSymbolStr(on) + " to : ");
     	to.print();
     	*/
     	HashMap<Integer, GrammarState> map = transitionMap.get(from);
@@ -223,7 +221,7 @@ public class GrammarStateManager {
     			
         		for (Entry<Integer, Integer> entry : map.entrySet()) {
         			System.out.println("Reduce on symbol: " + CTokenType.getSymbolStr(entry.getKey()) + 
-        					" to top.dianmu.ccompiler.day49.top.dianmu.ccompiler.day50.top.dianmu.ccompiler.day52.top.dianmu.ccompiler.day53.top.dianmu.ccompiler.day54.top.dianmu.ccompiler.day55.top.dianmu.ccompiler.day61.top.dianmu.ccompiler.day65.top.dianmu.ccompiler.day66.top.dianmu.ccompiler.day67.top.dianmu.ccompiler.day68.top.dianmu.ccompiler.day70.BottomUpParser.top.dianmu.ccompiler.day53.top.dianmu.ccompiler.day54.top.dianmu.ccompiler.day55.top.dianmu.ccompiler.day61.top.dianmu.ccompiler.day65.top.dianmu.ccompiler.day66.top.dianmu.ccompiler.day67.top.dianmu.ccompiler.day68.top.dianmu.ccompiler.day70.Production " + entry.getValue());
+        					" to Production " + entry.getValue());
         		}
     		
     	} 	
