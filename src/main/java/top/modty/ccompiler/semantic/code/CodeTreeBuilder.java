@@ -28,7 +28,7 @@ public class CodeTreeBuilder {
     	
     	return treeBuilder;
     }
-    
+
     public ICodeNode getFunctionNodeByName(String name) {
     	return funcMap.get(name);
     }
@@ -39,7 +39,9 @@ public class CodeTreeBuilder {
     	valueStack = parser.getValueStack();
     }
     
-   
+   public void clean(){
+    	treeBuilder=null;
+   }
     
     public ICodeNode buildCodeTree(int production, String text) {
     	ICodeNode node = null;
@@ -50,7 +52,7 @@ public class CodeTreeBuilder {
     	case CGrammarInitializer.Specifiers_DeclList_Semi_TO_Def:
     		/*
     		 * 当解析到变量定义时,例如int a[3]; 走到这里
-    		 * 我们为变量定义增加一个执行节点，目的是在数组变量定义出现时，立马生成jvm指令，
+    		 * 变量定义增加一个执行节点，在数组变量定义出现时，立马生成jvm指令，
     		 * 而不要等到第一次读写数组时，才去为数组的创建生成jvm指令
     		 */
     		node = ICodeFactory.createICodeNode(CTokenType.DEF);
@@ -283,7 +285,7 @@ public class CodeTreeBuilder {
     	
     	if (node != null) {
     		node.setAttribute(ICodeKey.PRODUCTION, production);
-    		codeNodeStack.push(node);	
+    		codeNodeStack.push(node);
     	}
     	
     	return node;

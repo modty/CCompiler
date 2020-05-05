@@ -1,12 +1,14 @@
 package top.modty.ccompiler.semantic;
 
+import com.alibaba.fastjson.JSONObject;
+import top.modty.ccompiler.commons.Node;
+import top.modty.ccompiler.commons.Nodes;
 import top.modty.ccompiler.commons.constants.CTokenType;
 import top.modty.ccompiler.grammar.*;
 import top.modty.ccompiler.lex.Lexer;
 import top.modty.ccompiler.semantic.code.CodeTreeBuilder;
 
-import java.util.HashMap;
-import java.util.Stack;
+import java.util.*;
 
 
 public class LRStateTableParser {
@@ -14,6 +16,7 @@ public class LRStateTableParser {
 	int    lexerInput = 0;
 	int    nestingLevel = 0;
 	int    enumVal = 0;
+	public int times=0;
 	String text = "";
 	public static final String GLOBAL_SCOPE = "global";
 	public String symbolScope = GLOBAL_SCOPE;
@@ -33,7 +36,6 @@ public class LRStateTableParser {
     	lrStateTable = GrammarStateManager.getGrammarManager().getLRStateTable();
     	codeTreeBuilder.setParser(this);
     }
-    
     private Stack<Object> valueStack = new Stack<Object>();
     private Stack<Integer> parseStack = new Stack<Integer>();
     
@@ -61,22 +63,29 @@ public class LRStateTableParser {
 		GrammarState state = GrammarStateManager.getGrammarManager().getGrammarState(stateNum);
 		state.print();
     }
-    
-    public void parse() {
-    
+    public void clear(){
+		typeSystem.clear();
+	}
+    public List<Object> parse() {
+		List<Object> nodes=new ArrayList<>();
+		nodes.add(new Node(CTokenType.values()[lexerInput].toString(),lexerInput));
+		Nodes treeList=null;
         while (true) {
-        	
+			times++;
         	Integer action = getAction(statusStack.peek(), lexerInput);
-        	
+//			for(Integer integer:statusStack){
+//				System.out.print(CTokenType.values()[integer].toString()+"   ");
+//			}
+//			System.out.println();
         	if (action == null) {
         		//解析出错
         		System.out.println("Shift for input: " + CTokenType.values()[lexerInput].toString());
         		System.err.println("The input is denied");
-    			return;
+    			return nodes;
         	}
-        	
+
         	if (action > 0) {
-        		//showCurrentStateInfo(action);
+//        		showCurrentStateInfo(action);
         		
         		//shift 操作
                 statusStack.push(action);
@@ -89,7 +98,8 @@ public class LRStateTableParser {
     			if (CTokenType.isTerminal(lexerInput)) {
     				System.out.println("Shift for input: " + CTokenType.values()[lexerInput].toString());
     				Object obj = takeActionForShift(lexerInput);
-    			
+    				Node node=new Node(text,lexerInput);
+					nodes.add(node);
     				lexer.advance();
         			lexerInput = lexer.lookAhead;
         			valueStack.push(obj);
@@ -100,32 +110,34 @@ public class LRStateTableParser {
         	} else {
         		if (action == 0) {
         			System.out.println("The input can be accepted");
-        			return;
+        			return nodes;
         		}
         		
         		int reduceProduction = - action;
         		Production product = ProductionManager.getProductionManager().getProductionByIndex(reduceProduction);
         		System.out.println("reduce by product: ");
-        		product.print();
-        		
+				product.print();
+				lexerInput = product.getLeft();
+				treeList=new Nodes();
+				treeList.setName(CTokenType.values()[lexerInput].toString());
+				System.out.println(nodes.size());
         		takeActionForReduce(reduceProduction);
-        	
-        		
         		int rightSize = product.getRight().size();
         		while (rightSize > 0) {
         			parseStack.pop();
         			valueStack.pop();
         			statusStack.pop();
+        			treeList.getChildren().add(nodes.get(nodes.size()-rightSize));
+        			nodes.remove(nodes.size()-rightSize);
         			rightSize--;
         		}
-        		
-        		lexerInput = product.getLeft();
+				nodes.add(treeList);
     			parseStack.push(lexerInput);
     			valueStack.push(attributeForParentNode);
         	}
         }
+
     }
-    
     private Object takeActionForShift(int token) {
     	if (token == CTokenType.LP.ordinal() || token == CTokenType.LC.ordinal()) {
     		nestingLevel++;
@@ -385,7 +397,6 @@ public class LRStateTableParser {
     			return next;
     		}
     	}
-    	
     	return null;
     }
     

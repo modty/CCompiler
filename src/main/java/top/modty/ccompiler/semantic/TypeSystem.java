@@ -17,11 +17,14 @@ public class TypeSystem {
 		return typeSystem;
 	}
 	private TypeSystem() {
-		
 	}
 	private HashMap<String, ArrayList<Symbol>> symbolTable = new HashMap<String, ArrayList<Symbol>>();
 	private HashMap<String, StructDefine> structTable = new HashMap<String, StructDefine>();
-	
+
+	public void clear(){
+		typeSystem=null;
+	}
+
 	public ArrayList<Symbol> getSymbolsByScope(String scope) {
 		ArrayList<Symbol> list = new ArrayList<Symbol>();
 		for (Map.Entry<String, ArrayList<Symbol>> entry : symbolTable.entrySet()) {
@@ -227,7 +230,6 @@ public class TypeSystem {
     	ArrayList<Symbol> symbolList = typeSystem.getSymbol(text);
     	int i = 0;
     	Symbol symbol = null;
-    	
     	while (i < symbolList.size()) {
     		Symbol sym = symbolList.get(i);
     		
@@ -242,7 +244,6 @@ public class TypeSystem {
     		if (symbol != null && symbolList.get(i).getLevel() >= level) {
     			symbol = symbolList.get(i);
     		}
-    		
     		i++;
     	}
     	
