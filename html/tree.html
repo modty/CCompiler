@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="js/echarts.min.js"></script>
+</head>
+
+<body>
+    <div id="main"></div>
+</body>
+<script>
+    var data = "";
+
+    var xml = new XMLHttpRequest();
+    xml.open('GET', 'http://localhost:8080/api/tree', true);
+    xml.onreadystatechange = function() {
+        if (xml.readyState == 4 && xml.status == 200) {
+            var json = JSON.parse(xml.responseText);
+            document.getElementById('main').setAttribute("style", "width: " + json['width'] + "px;height:" + json['height'] + "px;")
+            var myChart = echarts.init(document.getElementById('main'));
+            myChart.hideLoading();
+            data = json['data'][0];
+            myChart.setOption(option = {
+                tooltip: {
+                    trigger: 'item',
+                    triggerOn: 'mousemove'
+                },
+                label: {
+                    fontWeight: 'bolder'
+                },
+                series: [{
+                    type: 'tree',
+                    data: [data],
+                    top: '18%',
+                    bottom: '14%',
+                    orient: 'vertical',
+                    symbol: 'emptyCircle',
+                    symbolSize: 12,
+                    initialTreeDepth: -1,
+                    animationDurationUpdate: 750
+                }]
+            });
+        }
+    };
+    xml.send();
+</script>
+
+</html>
