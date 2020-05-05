@@ -7,6 +7,8 @@ import top.modty.ccompiler.semantic.*;
 import top.modty.ccompiler.semantic.code.CodeTreeBuilder;
 import top.modty.ccompiler.semantic.executor.BaseExecutor;
 
+import java.util.List;
+
 /**
  * @author 点木
  * @date 2020-05-04 16:46
@@ -18,7 +20,7 @@ public class BottomUpParser {
     public BottomUpParser() {
         BaseExecutor.isCompileMode = true;
         /*
-         * 把ProductionManager , top.dianmu.ccompiler.day52.top.dianmu.ccompiler.day53.top.dianmu.ccompiler.day54.top.dianmu.ccompiler.day55.top.dianmu.ccompiler.day61.top.dianmu.ccompiler.day65.top.dianmu.ccompiler.day66.top.dianmu.ccompiler.day67.top.dianmu.ccompiler.day68.top.dianmu.ccompiler.day70.BottomUpParser.top.dianmu.ccompiler.day53.top.dianmu.ccompiler.day55.top.dianmu.ccompiler.day61.top.dianmu.ccompiler.day65.top.dianmu.ccompiler.day66.top.dianmu.ccompiler.day67.top.dianmu.ccompiler.day68.top.dianmu.ccompiler.day70.FirstSetBuilder 两个类的初始化移到CGrammarInitializer
+         * 把ProductionManager , FirstSetBuilder 两个类的初始化移到CGrammarInitializer
          * 将SymbolDefine 修改成CTokenType, 确定表达式的first set集合运算正确
          */
         ProductionManager productionManager = ProductionManager.getProductionManager();
@@ -32,7 +34,10 @@ public class BottomUpParser {
         GrammarStateManager stateManager = GrammarStateManager.getGrammarManager();
         stateManager.buildTransitionStateMachine();
     }
-
+    public List<Object> parse(){
+        LRStateTableParser parser = new LRStateTableParser(lexer);
+        return parser.parse();
+    }
     public String getCode() {
         return code;
     }
@@ -54,7 +59,7 @@ public class BottomUpParser {
         return lexer.getRecognizedMap();
     }
     public static void main(String[] args) {
-
+        BottomUpParser bottomUpParser=new BottomUpParser();
         String code="\n" +
                 "void quicksort(int A[10], int p, int r) {\n" +
                 "    int x;\n" +
@@ -110,22 +115,32 @@ public class BottomUpParser {
                 "    }\n" +
                 "   \n" +
                 "}";
-//        code="void main(){\n" +
-//                "    \t\tint a;\n" +
-//                "    \t\tint b;\n" +
-//                "    \t\tb=10;\n" +
-//                "\t\t}";
+        code="void main() {\n" +
+                " int a;\n" +
+                " int i;\n" +
+                " if (i < 1){\n" +
+                "   a = 1;\n" +
+                " }\n" +
+                " else if (i < 2){\n" +
+                "   a = 2;\n" +
+                " }\n" +
+                " else {\n" +
+                "   a = 3;\n" +
+                "\n" +
+                " }\n" +
+                "}";
         Lexer lexer=new Lexer(code);
         lexer.getRecognizedMap().forEach(System.out::println);
         LRStateTableParser parser = new LRStateTableParser(lexer);
-        parser.parse();
-        ProgramGenerator generator = ProgramGenerator.getInstance();
-        generator.generateHeader();
-        CodeTreeBuilder treeBuilder = CodeTreeBuilder.getCodeTreeBuilder();
-        Intepretor intepretor = Intepretor.getIntepretor();
-        if (intepretor != null) {
-            intepretor.Execute(treeBuilder.getCodeTreeRoot());
-        }
-        generator.finish();
+        List<Object> s=parser.parse();
+        System.out.println(s);
+//        ProgramGenerator generator = ProgramGenerator.getInstance();
+//        generator.generateHeader();
+//        CodeTreeBuilder treeBuilder = CodeTreeBuilder.getCodeTreeBuilder();
+//        Intepretor intepretor = Intepretor.getIntepretor();
+//        if (intepretor != null) {
+//            intepretor.Execute(treeBuilder.getCodeTreeRoot());
+//        }
+//        generator.finish();
     }
 }
