@@ -218,11 +218,11 @@ public class Production {
     		System.out.print(".");
     	}
     	
-    	System.out.print("look ahead set: { ");
+    	System.out.print("	look ahead set: { ");
     	for (int i = 0; i < lookAhead.size(); i++) {
-    		System.out.print(CTokenType.getSymbolStr(lookAhead.get(i)) + " ");
+    		System.out.print("	"+CTokenType.getSymbolStr(lookAhead.get(i)) + " ");
     	}
-    	System.out.println("}");
+    	System.out.println("	}");
     }
     
     public boolean canBeReduce() {

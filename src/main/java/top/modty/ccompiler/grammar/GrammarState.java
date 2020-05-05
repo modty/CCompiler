@@ -51,7 +51,7 @@ public class GrammarState {
     }
     
     public void print() {
-    	System.out.println("State Number: " + stateNum);
+    	System.out.println("	State Number: " + stateNum);
     	for (int i = 0; i < productions.size(); i++) {
     		productions.get(i).print();
     	}

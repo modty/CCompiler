@@ -20,14 +20,15 @@ public class GrammarStateManager {
     	if (self == null) {
     		self = new GrammarStateManager();
     	}
-    	
     	return self;
     }
     
     private GrammarStateManager() {
     	
     }
-    
+    public void clean(){
+    	self=null;
+	}
     public HashMap<Integer, HashMap<Integer, Integer>> getLRStateTable() {
     	Iterator it = null;
         if (isTransitionTableCompressed) {
