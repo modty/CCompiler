@@ -1,0 +1,243 @@
+{
+    "edg": [{
+            "start": 1,
+            "end": 2,
+            "option": {
+                "label": "[ 0123456789 ]"
+            }
+        },
+        {
+            "start": 2,
+            "end": 1,
+            "option": {
+                "label": "EPSILON"
+            }
+        },
+        {
+            "start": 2,
+            "end": 4,
+            "option": {
+                "label": "EPSILON"
+            }
+        },
+        {
+            "start": 3,
+            "end": 1,
+            "option": {
+                "label": "EPSILON"
+            }
+        },
+        {
+            "start": 3,
+            "end": 4,
+            "option": {
+                "label": "EPSILON"
+            }
+        },
+        {
+            "start": 4,
+            "end": 5,
+            "option": {
+                "label": "EPSILON"
+            }
+        },
+        {
+            "start": 5,
+            "end": 6,
+            "option": {
+                "label": 46
+            }
+        },
+        {
+            "start": 6,
+            "end": 7,
+            "option": {
+                "label": "EPSILON"
+            }
+        },
+        {
+            "start": 7,
+            "end": 8,
+            "option": {
+                "label": "[ 0123456789 ]"
+            }
+        },
+        {
+            "start": 8,
+            "end": 18,
+            "option": {
+                "label": "EPSILON"
+            }
+        },
+        {
+            "start": 9,
+            "end": 10,
+            "option": {
+                "label": "[ 0123456789 ]"
+            }
+        },
+        {
+            "start": 10,
+            "end": 11,
+            "option": {
+                "label": "EPSILON"
+            }
+        },
+        {
+            "start": 11,
+            "end": 12,
+            "option": {
+                "label": 46
+            }
+        },
+        {
+            "start": 12,
+            "end": 15,
+            "option": {
+                "label": "EPSILON"
+            }
+        },
+        {
+            "start": 13,
+            "end": 14,
+            "option": {
+                "label": "[ 0123456789 ]"
+            }
+        },
+        {
+            "start": 14,
+            "end": 13,
+            "option": {
+                "label": "EPSILON"
+            }
+        },
+        {
+            "start": 14,
+            "end": 16,
+            "option": {
+                "label": "EPSILON"
+            }
+        },
+        {
+            "start": 15,
+            "end": 13,
+            "option": {
+                "label": "EPSILON"
+            }
+        },
+        {
+            "start": 15,
+            "end": 16,
+            "option": {
+                "label": "EPSILON"
+            }
+        },
+        {
+            "start": 16,
+            "end": 18,
+            "option": {
+                "label": "EPSILON"
+            }
+        },
+        {
+            "start": 17,
+            "end": 3,
+            "option": {
+                "label": "EPSILON"
+            }
+        },
+        {
+            "start": 17,
+            "end": 9,
+            "option": {
+                "label": "EPSILON"
+            }
+        }
+    ],
+    "state": [{
+            "id": 1,
+            "label": 1,
+            "class": "type-suss"
+        },
+        {
+            "id": 2,
+            "label": 2,
+            "class": "type-suss"
+        },
+        {
+            "id": 3,
+            "label": 3,
+            "class": "type-suss"
+        },
+        {
+            "id": 4,
+            "label": 4,
+            "class": "type-suss"
+        },
+        {
+            "id": 5,
+            "label": 5,
+            "class": "type-suss"
+        },
+        {
+            "id": 6,
+            "label": 6,
+            "class": "type-suss"
+        },
+        {
+            "id": 7,
+            "label": 7,
+            "class": "type-suss"
+        },
+        {
+            "id": 8,
+            "label": 8,
+            "class": "type-suss"
+        },
+        {
+            "id": 9,
+            "label": 9,
+            "class": "type-suss"
+        },
+        {
+            "id": 10,
+            "label": 10,
+            "class": "type-suss"
+        },
+        {
+            "id": 11,
+            "label": 11,
+            "class": "type-suss"
+        },
+        {
+            "id": 12,
+            "label": 12,
+            "class": "type-suss"
+        },
+        {
+            "id": 13,
+            "label": 13,
+            "class": "type-suss"
+        },
+        {
+            "id": 14,
+            "label": 14,
+            "class": "type-suss"
+        },
+        {
+            "id": 15,
+            "label": 15,
+            "class": "type-suss"
+        },
+        {
+            "id": 16,
+            "label": 16,
+            "class": "type-suss"
+        },
+        {
+            "id": 17,
+            "label": 17,
+            "class": "type-suss"
+        }
+    ]
+}

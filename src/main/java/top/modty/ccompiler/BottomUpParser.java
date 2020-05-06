@@ -4,9 +4,9 @@ import top.modty.ccompiler.grammar.GrammarStateManager;
 import top.modty.ccompiler.grammar.ProductionManager;
 import top.modty.ccompiler.lex.Lexer;
 import top.modty.ccompiler.semantic.*;
-import top.modty.ccompiler.semantic.code.CodeTreeBuilder;
 import top.modty.ccompiler.semantic.executor.BaseExecutor;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -34,7 +34,7 @@ public class BottomUpParser {
         GrammarStateManager stateManager = GrammarStateManager.getGrammarManager();
         stateManager.buildTransitionStateMachine();
     }
-    public List<Object> parse(){
+    public HashMap<String, List<HashMap<String, Object>>> parse(){
         LRStateTableParser parser = new LRStateTableParser(lexer);
         return parser.parse();
     }
@@ -132,8 +132,7 @@ public class BottomUpParser {
         Lexer lexer=new Lexer(code);
         lexer.getRecognizedMap().forEach(System.out::println);
         LRStateTableParser parser = new LRStateTableParser(lexer);
-        List<Object> s=parser.parse();
-        System.out.println(s);
+        HashMap<String, List<HashMap<String, Object>>> s=parser.parse();
 //        ProgramGenerator generator = ProgramGenerator.getInstance();
 //        generator.generateHeader();
 //        CodeTreeBuilder treeBuilder = CodeTreeBuilder.getCodeTreeBuilder();

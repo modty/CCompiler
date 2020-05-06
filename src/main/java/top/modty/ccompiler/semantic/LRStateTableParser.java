@@ -1,6 +1,5 @@
 package top.modty.ccompiler.semantic;
 
-import com.alibaba.fastjson.JSONObject;
 import top.modty.ccompiler.commons.Node;
 import top.modty.ccompiler.commons.Nodes;
 import top.modty.ccompiler.commons.constants.CTokenType;
@@ -66,7 +65,7 @@ public class LRStateTableParser {
     public void clear(){
 		typeSystem.clear();
 	}
-    public List<Object> parse() {
+    public HashMap<String, List<HashMap<String, Object>>> parse() {
 		List<Object> nodes=new ArrayList<>();
 		nodes.add(new Node(CTokenType.values()[lexerInput].toString(),lexerInput));
 		Nodes treeList=null;
@@ -81,7 +80,7 @@ public class LRStateTableParser {
         		//解析出错
         		System.out.println("Shift for input: " + CTokenType.values()[lexerInput].toString());
         		System.err.println("The input is denied");
-    			return nodes;
+    			return null;
         	}
 
         	if (action > 0) {
@@ -110,7 +109,7 @@ public class LRStateTableParser {
         	} else {
         		if (action == 0) {
         			System.out.println("The input can be accepted");
-        			return nodes;
+        			return getResponse(nodes.get(0));
         		}
         		
         		int reduceProduction = - action;
@@ -399,5 +398,39 @@ public class LRStateTableParser {
     	}
     	return null;
     }
-    
+    public HashMap<String,List<HashMap<String,Object>>> getResponse(Object nodes){
+		HashMap<String,List<HashMap<String,Object>>> response=new HashMap<>();
+		List<HashMap<String,Object>> state=new ArrayList<>();
+		List<HashMap<String,Object>> edg=new ArrayList<>();
+		response.put("state",state);
+		response.put("edg",edg);
+		getResponseHelper(0,state,edg,nodes);
+		return response;
+	}
+
+	private int getResponseHelper(int id,List<HashMap<String,Object>> state,List<HashMap<String,Object>> edg,Object obj){
+    	HashMap<String,Object> stateTemp=new HashMap<>();
+
+		stateTemp.put("id",id);
+		if(obj instanceof Node){
+			stateTemp.put("label",((Node)obj).getName());
+			stateTemp.put("class","type-suss");
+			state.add(stateTemp);
+			return 1;
+		}else{
+			stateTemp.put("label",((Nodes)obj).getName());
+			stateTemp.put("class","type-ready");
+			state.add(stateTemp);
+			int tempId=1;
+			for(Object son :((Nodes)obj).getChildren()){
+				HashMap<String,Object> edgTemp=new HashMap<>();
+				edgTemp.put("start",id);
+				edgTemp.put("end",id+tempId);
+				edgTemp.put("option",new HashMap<String,String>());
+				edg.add(edgTemp);
+				tempId+=getResponseHelper(id+tempId,state,edg,son);
+			}
+			return tempId;
+		}
+	}
 }
