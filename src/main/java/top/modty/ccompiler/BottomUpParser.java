@@ -4,6 +4,8 @@ import top.modty.ccompiler.grammar.GrammarStateManager;
 import top.modty.ccompiler.grammar.ProductionManager;
 import top.modty.ccompiler.lex.Lexer;
 import top.modty.ccompiler.semantic.*;
+import top.modty.ccompiler.semantic.code.CodeTreeBuilder;
+import top.modty.ccompiler.semantic.code.ProgramGenerator;
 import top.modty.ccompiler.semantic.executor.BaseExecutor;
 
 import java.util.HashMap;
@@ -115,31 +117,27 @@ public class BottomUpParser {
                 "    }\n" +
                 "   \n" +
                 "}";
-        code="void main() {\n" +
-                " int a;\n" +
-                " int i;\n" +
-                " if (i < 1){\n" +
-                "   a = 1;\n" +
-                " }\n" +
-                " else if (i < 2){\n" +
-                "   a = 2;\n" +
-                " }\n" +
-                " else {\n" +
-                "   a = 3;\n" +
+        code="struct CTag {\n" +
+                "    int x;\n" +
+                "    char c;\n" +
+                "};\n" +
                 "\n" +
-                " }\n" +
+                "void main() {\n" +
+                "   struct CTag myTag;\n" +
+                "   myTag.x = 1;\n" +
+                "   printf(\"value of x in myTag is %d\", myTag.x);\n" +
                 "}";
         Lexer lexer=new Lexer(code);
         lexer.getRecognizedMap().forEach(System.out::println);
         LRStateTableParser parser = new LRStateTableParser(lexer);
         HashMap<String, List<HashMap<String, Object>>> s=parser.parse();
-//        ProgramGenerator generator = ProgramGenerator.getInstance();
-//        generator.generateHeader();
-//        CodeTreeBuilder treeBuilder = CodeTreeBuilder.getCodeTreeBuilder();
-//        Intepretor intepretor = Intepretor.getIntepretor();
-//        if (intepretor != null) {
-//            intepretor.Execute(treeBuilder.getCodeTreeRoot());
-//        }
-//        generator.finish();
+        ProgramGenerator generator = ProgramGenerator.getInstance();
+        generator.generateHeader();
+        CodeTreeBuilder treeBuilder = CodeTreeBuilder.getCodeTreeBuilder();
+        Intepretor intepretor = Intepretor.getIntepretor();
+        if (intepretor != null) {
+            intepretor.Execute(treeBuilder.getCodeTreeRoot());
+        }
+        generator.finish();
     }
 }

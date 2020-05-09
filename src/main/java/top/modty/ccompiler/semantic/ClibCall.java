@@ -2,13 +2,18 @@ package top.modty.ccompiler.semantic;
 
 
 import top.modty.ccompiler.commons.constants.Instruction;
+import top.modty.ccompiler.semantic.code.ProgramGenerator;
 import top.modty.ccompiler.semantic.executor.ArrayValueSetter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-
+/**
+ * @author 点木
+ * @date 2020-05-05 16:05
+ * @mes C语言函数替换为Java函数替换
+ */
 public class ClibCall {
 	private Set<String> apiSet;
 	
@@ -120,6 +125,13 @@ public class ClibCall {
     	return null;
     }
     
+    /**
+     * @author 点木
+     * @date 2020/5/9 
+     * @return
+     * @params 
+     * @mes 生成输出字符串的java汇编源码
+    */
     private void generateJavaAssemblyForPrintf(String argStr, int argCount) {
     	ProgramGenerator generator = ProgramGenerator.getInstance();
     	String funcName = generator.getCurrentFuncName();

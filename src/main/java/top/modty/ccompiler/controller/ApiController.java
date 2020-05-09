@@ -1,15 +1,11 @@
 package top.modty.ccompiler.controller;
 
-import com.alibaba.fastjson.JSON;
 import org.springframework.web.bind.annotation.*;
 import top.modty.ccompiler.BottomUpParser;
 import top.modty.ccompiler.commons.constants.Grammar;
 import top.modty.ccompiler.dfaNfa.ThompsonConstruction;
 import top.modty.ccompiler.lex.Lexer;
-import top.modty.ccompiler.semantic.Intepretor;
 import top.modty.ccompiler.semantic.LRStateTableParser;
-import top.modty.ccompiler.semantic.ProgramGenerator;
-import top.modty.ccompiler.semantic.code.CodeTreeBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;

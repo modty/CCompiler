@@ -1,14 +1,18 @@
-package top.modty.ccompiler.semantic;
+package top.modty.ccompiler.semantic.code;
 
 
 import top.modty.ccompiler.commons.constants.Directive;
 import top.modty.ccompiler.commons.constants.Instruction;
-import top.modty.ccompiler.semantic.code.CodeGenerator;
+import top.modty.ccompiler.semantic.*;
 import top.modty.ccompiler.semantic.executor.ArrayValueSetter;
 
 import java.util.*;
 
-
+/**
+ * @author 点木
+ * @date 2020-05-05 16:05
+ * @mes 生成汇编
+ */
 public class ProgramGenerator extends CodeGenerator {
 	private static ProgramGenerator instance = null;
 	private Stack<String> nameStack = new Stack<String>();

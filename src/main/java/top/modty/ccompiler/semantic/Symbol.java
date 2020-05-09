@@ -2,6 +2,7 @@ package top.modty.ccompiler.semantic;
 
 
 import top.modty.ccompiler.commons.constants.Instruction;
+import top.modty.ccompiler.semantic.code.ProgramGenerator;
 import top.modty.ccompiler.semantic.executor.ArrayValueSetter;
 import top.modty.ccompiler.semantic.executor.BaseExecutor;
 import top.modty.ccompiler.semantic.inter.IValueSetter;

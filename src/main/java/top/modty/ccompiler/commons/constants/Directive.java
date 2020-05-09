@@ -1,8 +1,14 @@
 package top.modty.ccompiler.commons.constants;
-
+/**
+ * @author 点木
+ * @date 2020-05-05 16:05
+ * @mes java相关宏指令
+ */
 public enum Directive {
+    // 类
     CLASS_PUBLIC(".class public"),
     END_CLASS(".end class"),
+    // 父类
     SUPER(".super"),
     FIELD_PRIVATE_STATIC(".field private static"),
     METHOD_STATIC(".method static"),

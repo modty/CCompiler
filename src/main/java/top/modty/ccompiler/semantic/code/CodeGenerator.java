@@ -8,6 +8,13 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
+
+/**
+ * @author 点木
+ * @date 2020-05-05 16:05
+ * @mes  该类先创建一个以.j结尾的文件，然后通过PrintWriter 把内容写入到该文件中，
+ * emit开头的函数把相关的java汇编指令写入文件。
+ */
 public class CodeGenerator {
     private  PrintWriter assemblyFile;
     private  int instructionCount = 0;

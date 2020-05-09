@@ -1,5 +1,9 @@
 package top.modty.ccompiler.commons.constants;
-
+/**
+ * @author 点木
+ * @date 2020-05-05 16:05
+ * @mes java操作符指令
+ */
 public enum Instruction {
     LDC("ldc"),
     
