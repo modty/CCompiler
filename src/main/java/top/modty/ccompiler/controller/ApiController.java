@@ -79,7 +79,7 @@ public class ApiController {
     }
 
     @RequestMapping("/nfaDfaMacro")
-    public void nfadfa(HttpServletRequest request) throws Exception {
+    public boolean nfadfa(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
         macro=new HashMap<>();
         for(String key:parameterMap.keySet()){
@@ -87,27 +87,51 @@ public class ApiController {
         }
         ThompsonConstruction construction = new ThompsonConstruction();
         construction.runMacroExample(macro);
+        return true;
     }
 
     @RequestMapping("/nfaDfaExpr")
-    public void nfaDfaExpr(HttpServletRequest request) throws Exception {
+    public HashMap<String, List<HashMap<String, Object>>> nfaDfaExpr(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
-        regularExpr=new ArrayList(Collections.singleton(parameterMap.get("regularExpr")));
+        String[] arr=parameterMap.get("expr");
+        regularExpr=new ArrayList<>();
+        for(int i=0;i<arr.length;i++){
+            regularExpr.add(arr[i]);
+        }
         ThompsonConstruction construction = new ThompsonConstruction();
         construction.runMacroExample(macro);
-        construction.runMacroExpandExample(new ArrayList(Collections.singleton(parameterMap.get("regularExpr"))));
-        construction.runNfaMachineConstructorExample();
+        construction.runMacroExpandExample(regularExpr);
+        return construction.runNfaMachineConstructorExample();
     }
-    @RequestMapping("/nfaDfaInputString")
-    public void nfaDfaInputString(HttpServletRequest request) throws Exception {
+    @RequestMapping("/nfaDfaToDfa")
+    public HashMap<String, List<HashMap<String, Object>>> nfaDfaToDfa(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
-        strings=parameterMap.get("inputString")[0];
+        String[] arr=parameterMap.get("expr");
+        regularExpr=new ArrayList<>();
+        for(int i=0;i<arr.length;i++){
+            regularExpr.add(arr[i]);
+        }
+        ThompsonConstruction construction = new ThompsonConstruction();
+        construction.runMacroExample(macro);
+        construction.runMacroExpandExample(regularExpr);
+        construction.runNfaMachineConstructorExample();
+        construction.runNfaIntepretorExample(strings);
+        return construction.runDfaConstructorExample();
+    }
+    @RequestMapping("/nfaDfaMinDfa")
+    public HashMap<String, List<HashMap<String, Object>>> nfaDfaMinDfa(HttpServletRequest request) throws Exception {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        String[] arr=parameterMap.get("expr");
+        regularExpr=new ArrayList<>();
+        for(int i=0;i<arr.length;i++){
+            regularExpr.add(arr[i]);
+        }
         ThompsonConstruction construction = new ThompsonConstruction();
         construction.runMacroExample(macro);
         construction.runMacroExpandExample(regularExpr);
         construction.runNfaMachineConstructorExample();
         construction.runNfaIntepretorExample(strings);
         construction.runDfaConstructorExample();
-        construction.runMinimizeDFAExample();
+        return construction.runMinimizeDFAExample();
     }
 }

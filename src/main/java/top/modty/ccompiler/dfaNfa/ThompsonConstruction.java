@@ -1,18 +1,15 @@
 package top.modty.ccompiler.dfaNfa;
 
 
-import com.alibaba.fastjson.JSON;
-
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 public class ThompsonConstruction {
     private MacroHandler macroHandler = null;
     RegularExpressionHandler regularExpr = null;
     private Lexer lexer = null;
-    
     private NfaMachineConstructor nfaMachineConstructor = null;
     private NfaPrinter nfaPrinter = new NfaPrinter();
     
@@ -22,7 +19,7 @@ public class ThompsonConstruction {
     
     DfaConstructor dfaConstructor = null;
     
-    MinimizeDFA    miniDfa = null;
+    MinimizeDFA  miniDfa = null;
     
     public void runMacroExample(HashMap<String,String> macro) throws Exception {
     	System.out.println("Please enter macro definition");
@@ -32,7 +29,6 @@ public class ThompsonConstruction {
     }
     
     public void runMacroExpandExample(ArrayList<String> list) throws Exception {
-    	System.out.println("Enter regular expression");
         regularExpr = new RegularExpressionHandler(list, macroHandler);
     	System.out.println("regular expression after expanded: ");
     	for (int i = 0; i < regularExpr.getRegularExpressionCount(); i++) {
@@ -142,16 +138,17 @@ public class ThompsonConstruction {
     
     public void runNfaIntepretorExample(String input) {
     	nfaIntepretor = new NfaIntepretor(pair.startNode);
-    	nfaIntepretor.intepretNfa(input);
+//    	nfaIntepretor.intepretNfa(input);
     }
  
-   public void runDfaConstructorExample() {
+   public HashMap<String, List<HashMap<String, Object>>> runDfaConstructorExample() {
 	   dfaConstructor = new DfaConstructor(pair, nfaIntepretor);
+	   dfaConstructor.ends=new HashSet();
 	   dfaConstructor.convertNfaToDfa();
-	   dfaConstructor.printDFA();
+	   return dfaConstructor.printDFA();
    }
     
-    public void runNfaMachineConstructorExample() throws Exception {
+    public HashMap<String, List<HashMap<String, Object>>> runNfaMachineConstructorExample() throws Exception {
     	lexer = new Lexer(regularExpr);
     	nfaMachineConstructor = new NfaMachineConstructor(lexer);
 
@@ -164,12 +161,14 @@ public class ThompsonConstruction {
     	nfaMachineConstructor.constructOptionsClosure(pair);
     	nfaMachineConstructor.cat_expr(pair);
     	nfaMachineConstructor.expr(pair);
+		nfaPrinter.ends=new HashSet();
     	nfaPrinter.printNfa(pair.startNode);
+    	return nfaPrinter.response;
     }
     
-    public void runMinimizeDFAExample() {
+    public HashMap<String, List<HashMap<String, Object>>> runMinimizeDFAExample() {
     	miniDfa = new MinimizeDFA(dfaConstructor);
-    	miniDfa.minimize();
+		return miniDfa.minimize();
     }
     
    public HashMap<String, List<HashMap<String, Object>>> getNFAResponse(){
@@ -204,7 +203,7 @@ public class ThompsonConstruction {
     	macro.put("D","[0-9]");
     	macro.put("A","[a-zA-Z]");
     	ArrayList<String> regularExpr=new ArrayList<>();
-    	regularExpr.add("{D}[+]{D}|{D}\\-{D}|void");
+    	regularExpr.add("{D}*\\.{D}|{D}\\.{D}*");
     	String inputString="void";
 		ThompsonConstruction construction = new ThompsonConstruction();
 		construction.runMacroExample(macro);
@@ -212,7 +211,7 @@ public class ThompsonConstruction {
 		construction.runLexerExample();
 		construction.runNfaMachineConstructorExample();
 		construction.runNfaIntepretorExample(inputString);
-		construction.runDfaConstructorExample();
+		HashMap<String, List<HashMap<String, Object>>> stringListHashMap = construction.runDfaConstructorExample();
 		construction.runMinimizeDFAExample();
     }
 }

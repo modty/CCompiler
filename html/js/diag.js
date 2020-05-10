@@ -4,19 +4,25 @@ var diagGraph = {
     edg: [],
     statePoint: '',
     g: '',
-    init: function(statePoint, state, edg) {
+    init: function(statePoint, state, edg, horizontal, svgCanvas) {
+
         this.statePoint = statePoint
         this.state = state
         this.edg = edg
-        this.createG()
-        this.renderG()
+        this.createG(horizontal)
+        this.renderG(svgCanvas)
     },
-    createG: function() {
+    createG: function(horizontal) {
         this.g = new dagreD3.graphlib.Graph()
             .setGraph({})
             .setDefaultEdgeLabel(function() {
                 return {}
             })
+        if (horizontal) {
+            this.g.graph().rankdir = "LR";
+            this.g.graph().ranksep = 15;
+            this.g.graph().nodesep = 15;
+        }
     },
     drawNode: function() {
         for (let i in this.state) {
@@ -76,9 +82,9 @@ var diagGraph = {
             }
         }
     },
-    renderG: function() {
+    renderG: function(svgCanvas) {
         var render = new dagreD3.render()
-        var svg = d3.select('#svgCanvas')
+        var svg = d3.select('#' + svgCanvas)
         svg.select('g').remove() //删除以前的节点
         svg.append('g')
         var inner = svg.select('g')
@@ -89,10 +95,9 @@ var diagGraph = {
         })
         svg.call(zoom)
 
-        this.drawNode()
-        this.drawEdg()
-        render(d3.select('svg g'), this.g) //渲染节点
-
+        this.drawNode();
+        this.drawEdg();
+        render(svg.select('g'), this.g); //渲染节点
         var max =
             svg.node().clientWidth > svg.node().clientHeight ?
             svg.node().clientWidth :

@@ -1,11 +1,11 @@
 package top.modty.ccompiler.dfaNfa;
 
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 
 public class MinimizeDFA {
+	HashMap<String, List<HashMap<String, Object>>> response;
 	private DfaConstructor dfaCounstructor = null;
 	private DfaGroupManager groupManager = new DfaGroupManager();
 	private static final int ASCII_NUM = 128;
@@ -13,17 +13,22 @@ public class MinimizeDFA {
 	int[][] minDfa = null;
 	private List<Dfa> dfaList = null;
 	private DfaGroup newGroup = null;
-	
+	private HashMap<Integer,String> minDfaMap;
 	private boolean addNewGroup = false;
 	private static final int STATE_FAILURE = -1;
 	
     public MinimizeDFA(DfaConstructor theConstructor) {
-        this.dfaCounstructor = theConstructor;	
+		minDfaMap=new HashMap<>();
+		response=new HashMap<>();
+		response.put("edg",new ArrayList<>());
+		response.put("state",new ArrayList<>());
+		this.dfaCounstructor = theConstructor;
         dfaList = dfaCounstructor.getDfaList();
         dfaTransTable = dfaCounstructor.getDfaTransTable();
     }
     
-    public int[][] minimize() {
+    public HashMap<String, List<HashMap<String, Object>>> minimize() {
+    	DfaGroup.ends=new HashSet();
     	/*
     	 * 生成两个分区，分别将非接收状态节点和接收状态节点放入两个分区
     	 */
@@ -40,11 +45,10 @@ public class MinimizeDFA {
     		doGroupSeperationOnNumber();
     		doGroupSeperationOnCharacter();
     	}while (addNewGroup);
-    	
-    	createMiniDfaTransTable();
+		minDfaMap=DfaGroup.map;
+		createMiniDfaTransTable();
     	printMiniDfaTable();
-    	
-    	return minDfa;
+    	return response;
     }
     
     private void createMiniDfaTransTable() {
@@ -76,14 +80,36 @@ public class MinimizeDFA {
     }
     
     private void printMiniDfaTable() {
+    	for(Integer key :minDfaMap.keySet()){
+			HashMap<String,Object> stateTemp=new HashMap<>();
+			stateTemp.put("id",key);
+			stateTemp.put("label",minDfaMap.get(key));
+			if(DfaGroup.ends.contains(key)){
+				stateTemp.put("class","type-fail");
+			}else {
+				stateTemp.put("class","type-suss");
+			}
+			response.get("state").add(stateTemp);
+		}
+    	DfaGroup.map.clear();
+    	DfaGroup.GROUP_COUNT=0;
     	for (int i = 0; i < groupManager.size(); i++)
     		for (int j = 0; j < groupManager.size(); j++) {
+				HashMap<String,Object> edgTemp=new HashMap<>();
+				edgTemp.put("start",i);
+				edgTemp.put("end",j);
     		    if (isOnNumberClass(i,j)) {
     		    	System.out.println("from " + i + " to " + j + " on D");
-    		    }
-    		    if (isOnDot(i,j)) {
-    		    	System.out.println("from " + i + " to " + j + " on .");
-    		    }
+					edgTemp.put("label","D");
+					response.get("edg").add(edgTemp);
+				}else {
+					char c=isOnDot(i,j);
+					if(c!='0'){
+						System.out.println("From state " + i + " to state " + j + " on "+c);
+						edgTemp.put("label",c);
+						response.get("edg").add(edgTemp);
+					}
+				}
     		}
     }
     
@@ -97,14 +123,15 @@ public class MinimizeDFA {
     	
     	return true;
     }
-    
-    private boolean isOnDot(int from, int to) {
-    	if (minDfa[from]['.'] != to) {
-    		return false;
-    	}
-    	
-    	return true;
-    }
+
+	private char isOnDot(int from, int to) {
+		for(int i=0;i<minDfa[from].length;i++){
+			if (minDfa[from][i] == to) {
+				return (char) i;
+			}
+		}
+		return '0';
+	}
 
     
     private void initMiniDfaTransTable() {
@@ -123,8 +150,7 @@ public class MinimizeDFA {
     		DfaGroup group = groupManager.get(i);
     		
     		System.out.println("Handle seperation on group: ");
-    		group.printGroup();
-    		
+			group.printGroup();
     		Dfa first = group.get(0);
     		Dfa next = group.get(dfaCount);
 
@@ -140,10 +166,9 @@ public class MinimizeDFA {
     		    dfaCount++;
     		    next = group.get(dfaCount);
     		}
-    		
     		group.commitRemove();
     	}
-    }
+	}
     
     private void doGroupSeperationOnCharacter() {
     	//对输入是非数字字符时进行分割

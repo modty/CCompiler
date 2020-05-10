@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class Dfa {
 	
-	private static int STATE_NUM = 0;
+	public static int STATE_NUM = 0;
 	
 	int   stateNum = 0;
     Set<Nfa> nfaStates = new HashSet<Nfa>();

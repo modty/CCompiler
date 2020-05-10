@@ -1,10 +1,7 @@
 package top.modty.ccompiler.dfaNfa;
 
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 
 public class DfaConstructor {
@@ -12,25 +9,27 @@ public class DfaConstructor {
     private NfaIntepretor nfaIntepretor = null;
     
     private ArrayList<Dfa> dfaList = new ArrayList<Dfa>();
-    
+    public HashSet<Integer> dafHelper=new HashSet<>();
+    public HashMap<String, List<HashMap<String, Object>>> dfa=new HashMap<>();
+    public static HashSet<Integer> ends;
     //假定DFA状态机节点数不会超过254个
     private static final int MAX_DFA_STATE_COUNT = 254; 
     
     private static final int ASCII_COUNT = 128;
-    
+
     private static final int STATE_FAILURE = -1;
-    
+
     //使用二维数组表示DFA有限状态自动机
     private int[][] dfaStateTransformTable = new int[MAX_DFA_STATE_COUNT][ASCII_COUNT + 1];
-    
+
     public DfaConstructor(NfaPair pair, NfaIntepretor nfaIntepretor) {
     	this.nfaIntepretor = nfaIntepretor;
     	//不要打印内部信息
     	this.nfaIntepretor.debug = false;
 
     	this.nfaMachine = pair;
-    	
-    	initTransformTable();
+		this.dfa.put("state",new ArrayList<>());
+		initTransformTable();
     }
     
     private void initTransformTable() {
@@ -77,7 +76,7 @@ public class DfaConstructor {
         			if ( dfa == null) {
         				
         				System.out.println("Create DFA node:");
-						this.nfaIntepretor.debug = true;
+//						this.nfaIntepretor.debug = false;
 						Dfa newDfa = Dfa.getDfaFromNfaSet(closure);
         				printDfa(newDfa);
         				
@@ -122,36 +121,66 @@ public class DfaConstructor {
     			return dfa;
     		}
     	}
-    	
     	return null;
     }
     
     private void printDfa(Dfa dfa) {
-    	
-    	System.out.print("\tDfa state: " + dfa.stateNum + " its nfa states are: ");
+		HashMap<String,Object> state=new HashMap<>();
+		System.out.print("\tDfa state: " + dfa.stateNum + " its nfa states are: ");
+		String id="S"+dfa.stateNum+"\\n";
     	Iterator<Nfa> it = dfa.nfaStates.iterator();
+    	boolean isEnd=false;
     	while (it.hasNext()) {
-    		System.out.print(it.next().getStateNum());
-    		if (it.hasNext()) {
+			int stateNum=it.next().getStateNum();
+    		System.out.print(stateNum);
+    		id+="[ "+stateNum;
+			state.put("id","S"+dfa.stateNum+"\\n");
+			if(!isEnd&&NfaPrinter.ends.contains(stateNum)){
+				isEnd=true;
+				ends.add(dfa.stateNum);
+			}
+			if (it.hasNext()) {
     			System.out.print(",");
     		}
-    	}
-    	
+			id+=" ]";
+			state.put("id",dfa.stateNum);
+			state.put("label",id);
+			if (isEnd){
+				state.put("class","type-fail");
+			}else {
+				state.put("class","type-suss");
+			}
+		}
     	System.out.print("\n");
-    }
+    	if(!dafHelper.contains(dfa.stateNum)){
+			this.dfa.get("state").add(state);
+			dafHelper.add(dfa.stateNum);
+		}
+	}
     
-    public void printDFA() {
+    public HashMap<String, List<HashMap<String, Object>>> printDFA() {
+    	dfa.put("edg",new ArrayList<>());
     	int dfaNum = dfaList.size();
     	for (int i = 0; i < dfaNum; i++)
     		for (int j = 0; j < dfaNum; j++) {
+    			HashMap<String,Object> edg=new HashMap<>();
+				edg.put("start",i);
+				edg.put("end",j);
     			if (isOnNumberClass(i,j)) {
     				System.out.println("From state " + i + " to state " + j + " on D");
-    			}
-    			
-    			if (isOnDot(i, j)) {
-    				System.out.println("From state " + i + " to state " + j + " on dot");
-    			}
+					edg.put("label","D");
+					dfa.get("edg").add(edg);
+				}else {
+    				char c=isOnDot(i,j);
+    				if(c!='0'){
+						System.out.println("From state " + i + " to state " + j + " on "+c);
+						edg.put("label",c);
+						dfa.get("edg").add(edg);
+					}
+				}
     		}
+		Dfa.STATE_NUM=0;
+    	return dfa;
     }
     
     private boolean isOnNumberClass(int from, int to) {
@@ -161,15 +190,15 @@ public class DfaConstructor {
     			return false;
     		}
     	}
-    	
     	return true;
     }
     
-    private boolean isOnDot(int from, int to) {
-    	if (dfaStateTransformTable[from]['.'] != to) {
-    		return false;
-    	}
-    	
-    	return true;
+    private char isOnDot(int from, int to) {
+    	for(int i=0;i<dfaStateTransformTable[from].length;i++){
+			if (dfaStateTransformTable[from][i] == to) {
+				return (char) i;
+			}
+		}
+    	return '0';
     }
 }

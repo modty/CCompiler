@@ -117,16 +117,16 @@ public class BottomUpParser {
                 "    }\n" +
                 "   \n" +
                 "}";
-        code="struct CTag {\n" +
-                "    int x;\n" +
-                "    char c;\n" +
-                "};\n" +
-                "\n" +
-                "void main() {\n" +
-                "   struct CTag myTag;\n" +
-                "   myTag.x = 1;\n" +
-                "   printf(\"value of x in myTag is %d\", myTag.x);\n" +
-                "}";
+//        code="struct CTag {\n" +
+//                "    int x;\n" +
+//                "    char c;\n" +
+//                "};\n" +
+//                "\n" +
+//                "void main() {\n" +
+//                "   struct CTag myTag;\n" +
+//                "   myTag.x = 1;\n" +
+//                "   printf(\"value of x in myTag is %d\", myTag.x);\n" +
+//                "}";
         Lexer lexer=new Lexer(code);
         lexer.getRecognizedMap().forEach(System.out::println);
         LRStateTableParser parser = new LRStateTableParser(lexer);
