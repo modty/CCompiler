@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>点木(modTY)编译器</title>
+    <link href="css/demo.css" rel="stylesheet">
+    <link rel="icon" href="images/favicon.ico" type="image/ico">
+    <meta name="description" content="点木是一个基于Bootstrap v3.3.7的后台管理系统。">
+    <meta name="author" content="yinqi">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/materialdesignicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="js/jquery-tags-input/jquery.tagsinput.min.css">
+    <link href="css/style.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="lyear-layout-web">
+        <div class="lyear-layout-container">
+            <aside class="lyear-layout-sidebar">
+
+                <div id="logo" class="sidebar-header">
+                    <a href="home.html"><img src="images/logo-sidebar.png" title="LightYear" alt="LightYear" /></a>
+                </div>
+                <div class="lyear-layout-sidebar-scroll">
+
+                    <nav class="sidebar-main">
+                        <ul class="nav nav-drawer">
+                            <li class="nav-item nav-item-has-subnav">
+                                <li class="nav-item active"> <a href="home.html"><i class="mdi mdi-home"></i> 首页</a> </li>
+                            </li>
+                            <li class="nav-item nav-item-has-subnav">
+                                <a href="javascript:void(0)"><i class="mdi mdi-palette"></i> 词法分析</a>
+                                <ul class="nav nav-subnav">
+                                    <li> <a href="javascript:lexMap()">单词识别</a> </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item nav-item-has-subnav open">
+                                <a href="javascript:void(0)"><i class="mdi mdi-palette"></i> 语法分析</a>
+                                <ul class="nav nav-subnav">
+                                    <li> <a href="javascript:window.open('nfaDfa.html');">NFA--DFA</a> </li>
+                                    <li> <a href="javascript:window.open('ll1.html');">LL（1）预测分析</a> </li>
+                                    <li> <a href="javascript:window.open('sympol.html');">算符优先分析</a> </li>
+                                    <li> <a href="javascript:window.open('home.html');">LR分析法</a> </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item nav-item-has-subnav">
+                                <a href="javascript:void(0)"><i class="mdi mdi-palette"></i> 中间代码生成</a>
+                                <ul class="nav nav-subnav">
+                                </ul>
+                            </li>
+                            <li class="nav-item nav-item-has-subnav">
+                                <a href="javascript:void(0)"><i class="mdi mdi-palette"></i>目标代码生成</a>
+                                <ul class="nav nav-subnav">
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <div class="sidebar-footer">
+                        <p class="copyright">编译原理-编译器</p><br>
+                        <p class="copyright">学号：11703990617</p><br>
+                        <p class="copyright">姓名：龚权</p>
+                    </div>
+                </div>
+
+            </aside>
+            <header class="lyear-layout-header">
+
+                <nav class="navbar navbar-default">
+                    <div class="topbar">
+
+                        <div class="topbar-left">
+                            <div class="lyear-aside-toggler">
+                                <span class="lyear-toggler-bar"></span>
+                                <span class="lyear-toggler-bar"></span>
+                                <span class="lyear-toggler-bar"></span>
+                            </div>
+                            <span class="navbar-page-title"> 隐藏 </span>
+                        </div>
+
+                        <ul class="topbar-right">
+                            <li class="dropdown dropdown-skin">
+                                <span data-toggle="dropdown" class="icon-palette"><i class="mdi mdi-palette"></i></span>
+                                <ul class="dropdown-menu dropdown-menu-right" data-stopPropagation="true">
+                                    <li class="drop-title">
+                                        <p>主题</p>
+                                    </li>
+                                    <li class="drop-skin-li clearfix">
+                                        <span class="inverse">
+                    <input type="radio" name="site_theme" value="default" id="site_theme_1" checked>
+                    <label for="site_theme_1"></label>
+                  </span>
+                                        <span>
+                    <input type="radio" name="site_theme" value="dark" id="site_theme_2">
+                    <label for="site_theme_2"></label>
+                  </span>
+                                        <span>
+                    <input type="radio" name="site_theme" value="translucent" id="site_theme_3">
+                    <label for="site_theme_3"></label>
+                  </span>
+                                    </li>
+                                    <li class="drop-title">
+                                        <p>LOGO</p>
+                                    </li>
+                                    <li class="drop-skin-li clearfix">
+                                        <span class="inverse">
+                    <input type="radio" name="logo_bg" value="default" id="logo_bg_1" checked>
+                    <label for="logo_bg_1"></label>
+                  </span>
+                                        <span>
+                    <input type="radio" name="logo_bg" value="color_2" id="logo_bg_2">
+                    <label for="logo_bg_2"></label>
+                  </span>
+                                        <span>
+                    <input type="radio" name="logo_bg" value="color_3" id="logo_bg_3">
+                    <label for="logo_bg_3"></label>
+                  </span>
+                                        <span>
+                    <input type="radio" name="logo_bg" value="color_4" id="logo_bg_4">
+                    <label for="logo_bg_4"></label>
+                  </span>
+                                        <span>
+                    <input type="radio" name="logo_bg" value="color_5" id="logo_bg_5">
+                    <label for="logo_bg_5"></label>
+                  </span>
+                                        <span>
+                    <input type="radio" name="logo_bg" value="color_6" id="logo_bg_6">
+                    <label for="logo_bg_6"></label>
+                  </span>
+                                        <span>
+                    <input type="radio" name="logo_bg" value="color_7" id="logo_bg_7">
+                    <label for="logo_bg_7"></label>
+                  </span>
+                                        <span>
+                    <input type="radio" name="logo_bg" value="color_8" id="logo_bg_8">
+                    <label for="logo_bg_8"></label>
+                  </span>
+                                    </li>
+                                    <li class="drop-title">
+                                        <p>头部</p>
+                                    </li>
+                                    <li class="drop-skin-li clearfix">
+                                        <span class="inverse">
+                    <input type="radio" name="header_bg" value="default" id="header_bg_1" checked>
+                    <label for="header_bg_1"></label>                      
+                  </span>
+                                        <span>                                                     
+                    <input type="radio" name="header_bg" value="color_2" id="header_bg_2">
+                    <label for="header_bg_2"></label>                      
+                  </span>
+                                        <span>                                                     
+                    <input type="radio" name="header_bg" value="color_3" id="header_bg_3">
+                    <label for="header_bg_3"></label>
+                  </span>
+                                        <span>
+                    <input type="radio" name="header_bg" value="color_4" id="header_bg_4">
+                    <label for="header_bg_4"></label>                      
+                  </span>
+                                        <span>                                                     
+                    <input type="radio" name="header_bg" value="color_5" id="header_bg_5">
+                    <label for="header_bg_5"></label>                      
+                  </span>
+                                        <span>                                                     
+                    <input type="radio" name="header_bg" value="color_6" id="header_bg_6">
+                    <label for="header_bg_6"></label>                      
+                  </span>
+                                        <span>                                                     
+                    <input type="radio" name="header_bg" value="color_7" id="header_bg_7">
+                    <label for="header_bg_7"></label>
+                  </span>
+                                        <span>
+                    <input type="radio" name="header_bg" value="color_8" id="header_bg_8">
+                    <label for="header_bg_8"></label>
+                  </span>
+                                    </li>
+                                    <li class="drop-title">
+                                        <p>侧边栏</p>
+                                    </li>
+                                    <li class="drop-skin-li clearfix">
+                                        <span class="inverse">
+                    <input type="radio" name="sidebar_bg" value="default" id="sidebar_bg_1" checked>
+                    <label for="sidebar_bg_1"></label>
+                  </span>
+                                        <span>
+                    <input type="radio" name="sidebar_bg" value="color_2" id="sidebar_bg_2">
+                    <label for="sidebar_bg_2"></label>
+                  </span>
+                                        <span>
+                    <input type="radio" name="sidebar_bg" value="color_3" id="sidebar_bg_3">
+                    <label for="sidebar_bg_3"></label>
+                  </span>
+                                        <span>
+                    <input type="radio" name="sidebar_bg" value="color_4" id="sidebar_bg_4">
+                    <label for="sidebar_bg_4"></label>
+                  </span>
+                                        <span>
+                    <input type="radio" name="sidebar_bg" value="color_5" id="sidebar_bg_5">
+                    <label for="sidebar_bg_5"></label>
+                  </span>
+                                        <span>
+                    <input type="radio" name="sidebar_bg" value="color_6" id="sidebar_bg_6">
+                    <label for="sidebar_bg_6"></label>
+                  </span>
+                                        <span>
+                    <input type="radio" name="sidebar_bg" value="color_7" id="sidebar_bg_7">
+                    <label for="sidebar_bg_7"></label>
+                  </span>
+                                        <span>
+                    <input type="radio" name="sidebar_bg" value="color_8" id="sidebar_bg_8">
+                    <label for="sidebar_bg_8"></label>
+                  </span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    </div>
+                </nav>
+
+            </header>
+
+            <main class="lyear-layout-content">
+
+                <div class="container-fluid">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div id="left">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h2>文法</h2>
+                                    </div>
+                                    <div class="card">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Precursor</th>
+                                                    <th>Subsequent</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">1</th>
+                                                    <td>{}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">2</th>
+                                                    <td>{}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">3</th>
+                                                    <td>{}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <svg id="svgCanvas" style="width:100%;height:820px;"></svg>
+                        </div>
+                    </div>
+
+                </div>
+
+            </main>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/perfect-scrollbar.min.js"></script>
+    <!--标签插件-->
+    <script src="js/jquery-tags-input/jquery.tagsinput.min.js"></script>
+    <script type="text/javascript" src="js/main.min.js"></script>
+    <script type="text/javascript" src="js/Chart.js"></script>
+    <script type="text/javascript" src="js/wangEditor.min.js"></script>
+    <script src="js/d3.min.js" charset="utf-8"></script>
+    <script src="js/dagre-d3.js"></script>
+    <script src="js/diag.js"></script>
+    <script>
+        function createCard(key, values) {
+            var card = document.createElement('div');
+            card.className = "card";
+            var innerH = '<div class="card-header"><h2>' + key + '</h2></div>';
+            card.innerHTML = innerH;
+            var innerCard = document.createElement('div');
+            innerCard.className = "card";
+            var table = document.createElement('table');
+            table.className = "table";
+            table.innerHTML = "<thead><tr><th>前驱</th><th></th><th>后继</th></tr></thead>";
+            var tbody = document.createElement('tbody');
+            for (var i in values) {
+                var keys = values[i].split("-");
+                var tr = document.createElement('tr');
+                var htmlStr = '';
+                for (var i in keys) {
+                    if (i == 0) {
+                        htmlStr += '<th scope="row"><span class="label label-danger">' + keys[i] + '</span><td>--></td><td>';
+                    } else {
+                        htmlStr += '<span class="label label-info" style="margin-left:10px;">' + keys[i] + '</span>';
+                    }
+                }
+                htmlStr += '</tr>';
+                tr.innerHTML = htmlStr;
+                tbody.appendChild(tr);
+            }
+            table.appendChild(tbody);
+            innerCard.appendChild(table);
+            card.appendChild(innerCard);
+            return card;
+        }
+
+        function loadGrammer() {
+            var left = document.getElementById('left');
+            left.innerHTML = "";
+            var xml = new XMLHttpRequest();
+            xml.open('GET', 'http://localhost:8080/api/grammer', true);
+            xml.onreadystatechange = function() {
+                if (xml.readyState == 4 && xml.status == 200) {
+                    var json = JSON.parse(xml.responseText);
+                    console.log(json);
+                    for (var key in json) {
+                        left.appendChild(createCard(key, json[key]));
+                    }
+                }
+            }
+            xml.send();
+        }
+        window.onload = loadGrammer();
+        loadTree();
+
+        function loadTree() {
+            var state = [{
+                id: 1,
+                label: 'V1\n数据同步',
+                class: 'type-suss',
+                shape: "circle"
+            }, {
+                id: 2,
+                label: 'V2\nhive-sql',
+                class: 'type-suss'
+            }, {
+                id: 3,
+                label: 'V3\nspark-sql',
+                class: 'type-init'
+            }, {
+                id: 4,
+                label: 'V4\nshell',
+                class: 'type-ready'
+            }, {
+                id: 5,
+                label: 'V5\npython',
+                class: 'type-fail'
+            }, {
+                id: 6,
+                label: 'V6\n虚节点',
+                class: 'type-suss'
+            }, {
+                id: 7,
+                label: 'V7\nspark-sql',
+                class: 'type-suss'
+            }, {
+                id: 8,
+                label: 'V8\nshell',
+                class: 'type-freeze'
+            }, {
+                id: 9,
+                label: 'V9\n数据同步',
+                class: 'type-suss'
+            }, {
+                id: 10,
+                label: 'V10\nshell',
+                class: 'type-queue'
+            }, {
+                id: 11,
+                label: 'V11\nspark-sql',
+                class: 'type-run'
+            }, {
+                id: 12,
+                label: 'V12\nspark-sql',
+                class: 'type-suss'
+            }, {
+                id: 13,
+                label: 'V13\n虚节点',
+                class: 'type-init'
+            }, {
+                id: 14,
+                label: 'V14\n数据同步',
+                class: 'type-fail'
+            }, {
+                id: 0,
+                label: 'V15\nhive-sql',
+                class: 'type-freeze'
+            }, ]
+            var edg = [{
+                start: 1,
+                end: 4,
+                label: "test"
+            }, {
+                start: 1,
+                end: 3,
+                option: {}
+            }, {
+                start: 1,
+                end: 2,
+                option: {}
+            }, {
+                start: 6,
+                end: 7,
+                option: {}
+            }, {
+                start: 5,
+                end: 6,
+                option: {}
+            }, {
+                start: 9,
+                end: 10,
+                option: {}
+            }, {
+                start: 8,
+                end: 9,
+                option: {}
+            }, {
+                start: 11,
+                end: 12,
+                option: {}
+            }, {
+                start: 8,
+                end: 11,
+                option: {}
+            }, {
+                start: 5,
+                end: 8,
+                option: {}
+            }, {
+                start: 1,
+                end: 5,
+                option: {}
+            }, {
+                start: 13,
+                end: 14,
+                option: {}
+            }, {
+                start: 1,
+                end: 13,
+                option: {}
+            }, {
+                start: 0,
+                end: 1,
+                option: {}
+            }, ]
+            var xml = new XMLHttpRequest();
+            xml.open('GET', 'http://localhost:8080/api/tree', true);
+            xml.onreadystatechange = function() {
+                if (xml.readyState == 4 && xml.status == 200) {
+                    var json = JSON.parse(xml.responseText);
+                    state = json['state'];
+                    edg = json['edg'];
+                    var statePoint = 1; // 当前选中的点
+                    diagGraph.init(statePoint, state, edg, false, 'svgCanvas'); //创建关系图
+                }
+            };
+            xml.send();
+        }
+    </script>
+</body>
+
+</html>
