@@ -56,6 +56,7 @@ function replaceAll(str, replaceKey, replaceVal) {
 }
 // 初始化代码
 function setCode() {
+    lightyear.loading('show');
     let formData = new FormData()
     var str = editor.txt.text();
     str = replaceAll(str, "&gt;", ">");
@@ -65,6 +66,17 @@ function setCode() {
     var xml = new XMLHttpRequest();
     xml.open('POST', 'http://localhost:8080/api/setCode', true);
     xml.send(formData);
+    xml.onreadystatechange = function() {
+        if (xml.readyState == 4 && xml.status == 200) {
+            lightyear.notify("代码设置成功！", 'success', 1500);
+            lightyear.loading('hide');
+        }
+    };
+    xml.onerror = function() {
+        isCode = false;
+        lightyear.notify("代码设置失败！", 'danger', 100);
+        lightyear.loading('hide');
+    }
 }
 //词法分析
 function lexMap() {
@@ -118,7 +130,6 @@ function loadSuccessData(json) {
 }
 
 function loadGrammer(key) {
-    // document.getElementById('errorTableHead').innerHTML = '<thead><tr><th>HEAD</th><th>--></th><th>PRE</th></tr></thead><tbody id="errorTable"></tbody>'
     var xml = new XMLHttpRequest();
     var errorTable = document.getElementById('functionCard');
     errorTable.innerHTML = "";
@@ -208,4 +219,9 @@ function loadRecData(json) {
         tr.innerHTML = '<tr><th scope="row">' + key + '</th><td>' + localMap[key] + '</td><td>' + json[key].length + '</td></tr>';
         table.appendChild(tr);
     }
+}
+
+function LRAnalysis() {
+    var functionCard = document.getElementById('functionCard');
+    functionCard.innerHTML = "";
 }

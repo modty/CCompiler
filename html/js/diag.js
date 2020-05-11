@@ -69,8 +69,8 @@ var diagGraph = {
             let el = this.edg[i]
             if (el.start === this.statePoint || el.end === this.statePoint) {
                 this.g.setEdge(el.start, el.end, {
-                    style: 'stroke: #0fb2cc; fill: none;',
-                    arrowheadStyle: 'fill: #0fb2cc;stroke: #0fb2cc;',
+                    style: 'stroke: #FF0000; fill: none;',
+                    arrowheadStyle: 'fill: #FF0000;stroke: #FF0000;',
                     arrowhead: 'vee',
                     label: el.label
                 })
@@ -113,8 +113,8 @@ var diagGraph = {
                 d3.zoomIdentity.translate(tWidth, tHeight).scale(initialScale)
             ) //元素居中
     },
-    changePoint: function(point) {
+    changePoint: function(point, svgCanvas) {
         this.statePoint = point * 1.0
-        this.renderG()
+        this.renderG(svgCanvas)
     }
 }

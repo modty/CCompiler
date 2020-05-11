@@ -88,3 +88,9 @@ g.type-freeze>rect {
     height: 100px;
     background: #999999;
 }
+
+#left {
+    height: 820px;
+    width: 100%;
+    overflow: scroll;
+}

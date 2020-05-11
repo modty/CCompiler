@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <title>点木(modTY)编译器</title>
+    <link href="css/demo.css" rel="stylesheet">
     <link rel="icon" href="images/favicon.ico" type="image/ico">
     <meta name="description" content="点木是一个基于Bootstrap v3.3.7的后台管理系统。">
     <meta name="author" content="yinqi">
@@ -245,9 +246,9 @@
                                         <div class="form-group">
                                             <input class="form-control" type="email" id="example-nf-email" name="example-nf-email" placeholder="{D}\.{D}*|{D}*\.{D}">
                                         </div>
-                                        <td><button class="btn btn-cyan btn-w-md" type="button">NFA生成</button></td>
-                                        <td><button class="btn btn-cyan btn-w-md" type="button" style="margin-left: 10px;">NFA--DFA</button></td>
-                                        <td><button class="btn btn-cyan btn-w-md" type="button" style="margin-left: 10px;">DFA化简</button></td>
+                                        <td><button class="btn btn-cyan btn-w-md" type="button" onclick="javascript:createNFA()">NFA生成</button></td>
+                                        <td><button class="btn btn-cyan btn-w-md" type="button" style="margin-left: 10px;" onclick="javascript:nfaDfaToDfa()">NFA--DFA</button></td>
+                                        <td><button class="btn btn-cyan btn-w-md" type="button" style="margin-left: 10px;" onclick="javascript:nfaDfaMinDfa()">DFA化简</button></td>
                                     </form>
                                 </div>
                             </div>
@@ -278,7 +279,11 @@
 
                         </div>
 
-
+                        <div class="col-md-6">
+                            <svg id="svgCanvasNfa" style="width:100%;height:280px;"></svg>
+                            <svg id="svgCanvasDfa" style="width:100%;height:280px;"></svg>
+                            <svg id="svgCanvasMinDfa" style="width:100%;height:280px;"></svg>
+                        </div>
                     </div>
 
                 </div>
@@ -294,7 +299,10 @@
     <script type="text/javascript" src="js/main.min.js"></script>
     <script type="text/javascript" src="js/Chart.js"></script>
     <script type="text/javascript" src="js/wangEditor.min.js"></script>
-    <script src="js/setting.js"></script>
+    <script src="js/nfadfa.js"></script>
+    <script src="js/d3.min.js" charset="utf-8"></script>
+    <script src="js/dagre-d3.js"></script>
+    <script src="js/diag.js"></script>
 </body>
 
 </html>
