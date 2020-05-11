@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import top.modty.ccompiler.BottomUpParser;
 import top.modty.ccompiler.commons.constants.Grammar;
 import top.modty.ccompiler.dfaNfa.ThompsonConstruction;
+import top.modty.ccompiler.grammar.Symbols;
 import top.modty.ccompiler.lex.Lexer;
 import top.modty.ccompiler.semantic.LRStateTableParser;
 
@@ -38,25 +39,25 @@ public class ApiController {
         return response;
     }
     @GetMapping("/grammer")
-    public List<String> grammer(String key){
-        return grammar.grammers.get(key);
+    public HashMap<String, List<String>> grammer(){
+        return grammar.grammers;
     }
     @GetMapping("/tree")
     public HashMap<String, List<HashMap<String, Object>>> tree(){
-        code="void main() {\n" +
-                " int a;\n" +
-                " int i;\n" +
-                " if (i < 1){\n" +
-                "   a = 1;\n" +
-                " }\n" +
-                " else if (i < 2){\n" +
-                "   a = 2;\n" +
-                " }\n" +
-                " else {\n" +
-                "   a = 3;\n" +
-                "\n" +
-                " }\n" +
-                "}";
+//        code="void main() {\n" +
+//                " int a;\n" +
+//                " int i;\n" +
+//                " if (i < 1){\n" +
+//                "   a = 1;\n" +
+//                " }\n" +
+//                " else if (i < 2){\n" +
+//                "   a = 2;\n" +
+//                " }\n" +
+//                " else {\n" +
+//                "   a = 3;\n" +
+//                "\n" +
+//                " }\n" +
+//                "}";
         LRStateTableParser parser=null;
         HashMap<String, List<HashMap<String, Object>>> response=null;
         try{
@@ -133,5 +134,10 @@ public class ApiController {
         construction.runNfaIntepretorExample(strings);
         construction.runDfaConstructorExample();
         return construction.runMinimizeDFAExample();
+    }
+
+    @RequestMapping("/firstFollowSelect")
+    public HashMap<String, Symbols> firstFollowSelect(){
+        return null;
     }
 }

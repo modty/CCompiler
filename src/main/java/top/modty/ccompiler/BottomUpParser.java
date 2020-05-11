@@ -21,18 +21,13 @@ public class BottomUpParser {
     private Lexer lexer;
     public BottomUpParser() {
         BaseExecutor.isCompileMode = true;
-        /*
-         * 把ProductionManager , FirstSetBuilder 两个类的初始化移到CGrammarInitializer
-         * 将SymbolDefine 修改成CTokenType, 确定表达式的first set集合运算正确
-         */
         ProductionManager productionManager = ProductionManager.getProductionManager();
         // 初始化语法推导表达式
         productionManager.initProductions();
         // 打印语法推导表达式
-        // productionManager.printAllProductions();
+//         productionManager.printAllProductions();
         // 生成并打印fisrt集合
-        productionManager.runFirstSetAlgorithm();
-
+        productionManager.runFirstFollowSelectSetBuilder();
         GrammarStateManager stateManager = GrammarStateManager.getGrammarManager();
         stateManager.buildTransitionStateMachine();
     }

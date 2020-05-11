@@ -11,16 +11,16 @@ public class Grammar {
     public HashMap<String, List<String>> grammers;
     public Grammar(){
         grammers=new HashMap<>();
-        grammers.put("VariableDecalation",initVariableDecalationProductions());
-        grammers.put("Function",initFunctionProductions());
-        grammers.put("Structure",initStructureProductions());
-        grammers.put("Enum",initEmunProductions());
-        grammers.put("FunctionDefinition",initFunctionDefinition());
-        grammers.put("FunctionDefinitionWithIfElse",initFunctionDefinitionWithIfElse());
-        grammers.put("FunctionDefinitionWithSwitchCase",initFunctionDefinitionWithSwitchCase());
-        grammers.put("FunctionDefinitionWithLoop",initFunctionDefinitionWithLoop());
-        grammers.put("ComputingOperation",initComputingOperation());
-        grammers.put("Remainding",initRemaindingProduction());
+        grammers.put("变量定义",initVariableDecalationProductions());
+        grammers.put("函数声明",initFunctionProductions());
+        grammers.put("结构体",initStructureProductions());
+        grammers.put("枚举",initEmunProductions());
+        grammers.put("函数定义",initFunctionDefinition());
+        grammers.put("IF-ELSE",initFunctionDefinitionWithIfElse());
+        grammers.put("SWITCH-CASE",initFunctionDefinitionWithSwitchCase());
+        grammers.put("循环",initFunctionDefinitionWithLoop());
+        grammers.put("算术表达式",initComputingOperation());
+        grammers.put("其他",initRemaindingProduction());
     }
 
     private List<String> initVariableDecalationProductions() {

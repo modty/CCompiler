@@ -65,7 +65,7 @@ public class Production {
     	if (set.size() > 0) {
     		for (int i = 0; i < set.size(); i++) {
     	    	
-        		ArrayList<Integer> lookAhead = manager.getFirstSetBuilder().getFirstSet(set.get(i));
+        		ArrayList<Integer> lookAhead = manager.getFirstFollowSelectSetBuilder().getFirstSet(set.get(i));
         		
         		for (int j = 0; j < lookAhead.size(); j++) {
         			if (firstSet.contains(lookAhead.get(j)) == false) {
@@ -73,7 +73,7 @@ public class Production {
         			}
         		}
         		
-        		if (manager.getFirstSetBuilder().isSymbolNullable(set.get(i)) == false) {
+        		if (manager.getFirstFollowSelectSetBuilder().isSymbolNullable(set.get(i)) == false) {
         			break;
         		}
         		

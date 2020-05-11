@@ -93,21 +93,21 @@ public class GrammarState {
     	for (int i = 0; i < productions.size(); i++) {
     		productionStack.push(productions.get(i));
     	}
-    	
-    //	System.out.println("---begin make closure----");
+
+//    	System.out.println("---begin make closure----");
     	
     	while (productionStack.empty() == false) {
     		Production production = productionStack.pop();
-    		
-    		
+
+
 //    		System.out.println("\nproduction on top of stack is : ");
 //    		production.print();
 //    		production.printBeta();
-    		
-    		
+
+
     		if (CTokenType.isTerminal(production.getDotSymbol()) == true) {
 //    			    System.out.println("symbol after dot is not non-terminal, ignore and prcess next item");
-    			    continue;	
+    			    continue;
     			}
     		
     		int symbol = production.getDotSymbol();
@@ -125,12 +125,12 @@ public class GrammarState {
     			
     			if (closureSet.contains(newProduct) == false) {  
 //    				System.out.println("push and add new production to stack and closureSet");
-    				
+
     				closureSet.add(newProduct);
     				productionStack.push(newProduct);
 //    				System.out.println("Add new production:");
 //    				newProduct.print();
-    				removeRedundantProduction(newProduct);	
+    				removeRedundantProduction(newProduct);
     			}
     			else {
 //    				System.out.println("the production is already exist!");
@@ -141,8 +141,8 @@ public class GrammarState {
     		
     	}
     	
-    	//printClosure();
-    	//System.out.println("----end make closure----");
+//    	printClosure();
+//    	System.out.println("----end make closure----");
     	
     }
     

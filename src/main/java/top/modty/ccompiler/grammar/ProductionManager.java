@@ -8,7 +8,7 @@ public class ProductionManager {
 	
 	private static ProductionManager self = null;
 	
-	FirstSetBuilder firstSetBuilder = new FirstSetBuilder();
+	FirstFollowSelectSetBuilder firstFollowSelectSetBuilder = new FirstFollowSelectSetBuilder();
 	
     private HashMap<Integer, ArrayList<Production>> productionMap = new HashMap<Integer, ArrayList<Production>>();
     
@@ -27,12 +27,18 @@ public class ProductionManager {
     		
     }
     
-    public void runFirstSetAlgorithm() {
-    	firstSetBuilder.runFirstSets();
+    public void runFirstFollowSelectSetBuilder() {
+    	firstFollowSelectSetBuilder.runFirstSets();
+    	firstFollowSelectSetBuilder.runFollowSets();
+    	firstFollowSelectSetBuilder.runSelectSets();
+		firstFollowSelectSetBuilder.runParseSets();
     }
-    
-    public FirstSetBuilder getFirstSetBuilder() {
-    	return firstSetBuilder;
+    public void runFollowSetAlogorithm(){
+
+	}
+	public void runSelectSetAlogorithm(){}
+    public FirstFollowSelectSetBuilder getFirstFollowSelectSetBuilder() {
+    	return firstFollowSelectSetBuilder;
     }
     
     public void printAllProductions() {

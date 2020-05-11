@@ -97,7 +97,7 @@ public class LRStateTableParser {
     			if (CTokenType.isTerminal(lexerInput)) {
     				System.out.println("Shift for input: " + CTokenType.values()[lexerInput].toString());
     				Object obj = takeActionForShift(lexerInput);
-    				Node node=new Node(text,lexerInput);
+    				Node node=new Node(CTokenType.values()[lexerInput].toString()+"\\n"+text,lexerInput);
 					nodes.add(node);
     				lexer.advance();
         			lexerInput = lexer.lookAhead;
