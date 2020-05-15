@@ -8,7 +8,7 @@ public class ProductionManager {
 	
 	private static ProductionManager self = null;
 	
-	FirstFollowSelectSetBuilder firstFollowSelectSetBuilder = new FirstFollowSelectSetBuilder();
+	public FirstFollowSelectSetBuilder firstFollowSelectSetBuilder = new FirstFollowSelectSetBuilder();
 	
     private HashMap<Integer, ArrayList<Production>> productionMap = new HashMap<Integer, ArrayList<Production>>();
     
@@ -30,8 +30,9 @@ public class ProductionManager {
     public void runFirstFollowSelectSetBuilder() {
     	firstFollowSelectSetBuilder.runFirstSets();
     	firstFollowSelectSetBuilder.runFollowSets();
-    	firstFollowSelectSetBuilder.runSelectSets();
-		firstFollowSelectSetBuilder.runParseSets();
+    	// 设定文法不适合做LL1
+//    	firstFollowSelectSetBuilder.runSelectSets();
+//		firstFollowSelectSetBuilder.runParseSets();
     }
     public void runFollowSetAlogorithm(){
 

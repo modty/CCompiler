@@ -1,6 +1,7 @@
 var type = '';
 var editor = null;
 var code = null;
+var currentAction = null;
 loadHome();
 var localMap = {
     'fillCharacter': '填充符',
@@ -146,7 +147,7 @@ function loadGrammer(key) {
             var json = JSON.parse(xml.responseText);
             var tbody = document.createElement('tbody');
             for (var key in json) {
-                var keys = json[key].split("-");
+                var keys = json[key].split("@");
                 var tr = document.createElement('tr');
                 var htmlStr = '';
                 for (var i in keys) {
@@ -221,7 +222,187 @@ function loadRecData(json) {
     }
 }
 
-function LRAnalysis() {
+function initialFunctionCard(type) {
     var functionCard = document.getElementById('functionCard');
-    functionCard.innerHTML = "";
+    var html = '<div class="form-group"><div class="col-xs-4"><div class="left" id="grammerBody"><div class="card"><div class="card-header"><h2>语法</h2></div>' +
+        '<div class="card"><table class="table"><thead><tr><th>文法符号</th><th>集合</th></tr></thead><tbody id="grammerSympolBody"></tbody></table></div>' +
+        '</div></div></div><div class="col-xs-4"><div class="left"><div class="card"><div class="card-header"><h2>First集合</h2></div>' +
+        '<div class="card"><table class="table"><thead><tr><th>文法符号</th><th>集合</th></tr></thead><tbody id="firstSympolBody"></tbody></table></div>' +
+        '</div></div></div><div class="col-xs-4"><div class="left"><div class="card"><div class="card-header"><h2>Follow集合</h2></div><div class="card">' +
+        '<table class="table"><thead><tr><th>文法符号</th><th>集合</th></tr></thead><tbody id="followSympolBody"></tbody></table></div></div></div></div></div>';
+    if (type == "ll1") {
+        html += '<div class="col-xs-12"><div class="left"><div class="card "><div class="card-header"><h2>Select集合</h2></div>' +
+            '<div id="sectionSympolTables"></div></div></div></div>';
+    }
+    functionCard.innerHTML = html;
+
+}
+
+function initialFirstSymbols(key) {
+    var firstSymbolsBody = document.getElementById('firstSympolBody');
+    var xml = new XMLHttpRequest();
+    xml.open('GET', 'http://localhost:8080/api/firstSympol?key=' + key, true);
+    xml.onreadystatechange = function() {
+        if (xml.readyState == 4 && xml.status == 200) {
+            var json = JSON.parse(xml.responseText);
+            for (var key in json) {
+                var tr = document.createElement('tr');
+                tr.innerHTML = '<th scope="row"><span class="label label-danger">' + key + '</span></th>';
+                var td = document.createElement('td');
+                var html = "";
+                for (var i in json[key]) {
+                    html += '<span class="label label-info" style="margin-left:10px;">' + json[key][i] + '</span>';
+                }
+                td.innerHTML = html;
+                tr.appendChild(td);
+                firstSymbolsBody.appendChild(tr);
+            }
+        }
+    };
+    xml.send();
+}
+
+function initialFollowSymbols(key) {
+    var followSymbolsBody = document.getElementById('followSympolBody');
+    var xml = new XMLHttpRequest();
+    xml.open('GET', 'http://localhost:8080/api/followSympol?key=' + key, true);
+    xml.onreadystatechange = function() {
+        if (xml.readyState == 4 && xml.status == 200) {
+            var json = JSON.parse(xml.responseText);
+            for (var key in json) {
+                var tr = document.createElement('tr');
+                tr.innerHTML = '<th scope="row"><span class="label label-danger">' + key + '</span></th>';
+                var td = document.createElement('td');
+                var html = "";
+                for (var i in json[key]) {
+                    html += '<span class="label label-info" style="margin-left:10px;">' + json[key][i] + '</span>';
+                }
+                td.innerHTML = html;
+                tr.appendChild(td);
+                followSymbolsBody.appendChild(tr);
+            }
+        }
+    };
+    xml.send();
+}
+
+
+function initialSelectSymbols(key) {
+    var tables = document.getElementById("sectionSympolTables");
+    var xml = new XMLHttpRequest();
+    xml.open('GET', 'http://localhost:8080/api/selectSympol?key=' + key, true);
+    xml.onreadystatechange = function() {
+        if (xml.readyState == 4 && xml.status == 200) {
+            var json = JSON.parse(xml.responseText);
+            for (var key in json) {
+                var thead = document.createElement('thead');
+                var tbody = document.createElement('tbody');
+                var table = document.createElement('table');
+                table.className = "table table-bordered";
+                var headFile = document.createElement('span');
+                headFile.className = "label label-info";
+                headFile.style = "margin-left:10px;font-size:20px;";
+                headFile.innerText = "#" + key + "#";
+                var headHtml = "<tr>";
+                var bodyHtml = "";
+                bodyHtml += "<tr>";
+                for (var key1 in json[key]) {
+                    if (json[key][key1].length > 0) {
+                        headHtml += "<th>" + key1 + "</th>";
+                        bodyHtml += "<td>";
+                        for (var index in json[key][key1]) {
+                            bodyHtml += json[key][key1][index] + "  ";
+                        }
+                        bodyHtml += "</td>";
+                    }
+                }
+                headHtml += "</tr>";
+                bodyHtml += "</tr>";
+                thead.innerHTML = headHtml;
+                tbody.innerHTML = bodyHtml;
+                tables.appendChild(headFile);
+                table.appendChild(thead);
+                table.appendChild(tbody);
+                tables.appendChild(table);
+            }
+        }
+
+    };
+    xml.send();
+}
+
+function createCard(key, values) {
+    var card = document.createElement('div');
+    card.className = "card";
+    var innerH = '<div class="card-header"><h2>' + key + '</h2></div>';
+    card.innerHTML = innerH;
+    var innerCard = document.createElement('div');
+    innerCard.className = "card";
+    var table = document.createElement('table');
+    table.className = "table";
+    table.innerHTML = "<thead><tr><th>前驱</th><th>后继</th></tr></thead>";
+    var tbody = document.createElement('tbody');
+    for (var i in values) {
+        var keys = values[i].split("@");
+        var tr = document.createElement('tr');
+        var htmlStr = '';
+        for (var i in keys) {
+            if (i == 0) {
+                htmlStr += '<th scope="row"><span class="label label-danger">' + keys[i] + '</span><td>';
+            } else {
+                htmlStr += '<span class="label label-info" style="margin-left:10px;">' + keys[i] + '</span>';
+            }
+        }
+        htmlStr += '</tr>';
+        tr.innerHTML = htmlStr;
+        tbody.appendChild(tr);
+    }
+    table.appendChild(tbody);
+    innerCard.appendChild(table);
+    card.appendChild(innerCard);
+    return card;
+}
+
+function initialGrammerSymbols(key) {
+    var left = document.getElementById('grammerBody');
+    left.innerHTML = '';
+    var xml = new XMLHttpRequest();
+    xml.open('GET', 'http://localhost:8080/api/grammer?key=' + key, true);
+    xml.onreadystatechange = function() {
+        if (xml.readyState == 4 && xml.status == 200) {
+            var json = JSON.parse(xml.responseText);
+            console.log(json);
+            for (var key in json) {
+                left.appendChild(createCard(key, json[key]));
+            }
+        }
+    }
+    xml.send();
+}
+
+function analysis() {
+    if (currentAction == "ll1") {
+        window.open('LL1Analysis.html');
+    } else if (currentAction == "lr") {
+        window.open('LRAnalysis.html');
+    } else if (currentAction == "sympol") {
+        window.open('sympol.html');
+    }
+}
+
+function LL1Analysis() {
+    currentAction = "ll1";
+    initialFunctionCard(currentAction);
+    initialFirstSymbols(currentAction);
+    initialFollowSymbols(currentAction);
+    initialGrammerSymbols(currentAction);
+    initialSelectSymbols(currentAction);
+}
+
+function LRAnalysis() {
+    currentAction = "lr";
+    initialFunctionCard(currentAction);
+    initialFirstSymbols(currentAction);
+    initialGrammerSymbols(currentAction);
+    initialFollowSymbols(currentAction);
 }

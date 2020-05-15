@@ -203,8 +203,10 @@ public class Production {
     	return 0;
     }
     
-    public void print() {
+    public String print() {
+    	String s="";
     	System.out.print(CTokenType.getSymbolStr(left) + " -> " );
+    	s+=CTokenType.getSymbolStr(left) + " -> ";
     	for (int i = 0; i < right.size(); i++) {
     		if (i == dotPos) {
     			 printDot = true;
@@ -212,10 +214,12 @@ public class Production {
     		}
     		
     		System.out.print(CTokenType.getSymbolStr(right.get(i)) + " ");
+    		s+=CTokenType.getSymbolStr(right.get(i)) + " ";
     	}
     	
     	if (printDot == false) {
     		System.out.print(".");
+    		s+=".";
     	}
     	
     	System.out.print("	look ahead set: { ");
@@ -223,6 +227,7 @@ public class Production {
     		System.out.print("	"+CTokenType.getSymbolStr(lookAhead.get(i)) + " ");
     	}
     	System.out.println("	}");
+    	return s;
     }
     
     public boolean canBeReduce() {

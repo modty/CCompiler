@@ -19,7 +19,7 @@ public class LRStateTableParser {
 	String text = "";
 	public static final String GLOBAL_SCOPE = "global";
 	public String symbolScope = GLOBAL_SCOPE;
-	
+	public ArrayList<String> actions;
 	private Object attributeForParentNode = null;
 	private TypeSystem typeSystem = TypeSystem.getTypeSystem();
 	private Stack<Integer> statusStack = new Stack<Integer>();
@@ -31,6 +31,7 @@ public class LRStateTableParser {
     	statusStack.push(0);
     	valueStack.push(null);
     	lexer.advance();
+		actions=new ArrayList<>();
     	lexerInput = CTokenType.EXT_DEF_LIST.ordinal();
     	lrStateTable = GrammarStateManager.getGrammarManager().getLRStateTable();
     	codeTreeBuilder.setParser(this);
@@ -72,20 +73,17 @@ public class LRStateTableParser {
         while (true) {
 			times++;
         	Integer action = getAction(statusStack.peek(), lexerInput);
-//			for(Integer integer:statusStack){
-//				System.out.print(CTokenType.values()[integer].toString()+"   ");
-//			}
-//			System.out.println();
+
         	if (action == null) {
         		//解析出错
         		System.out.println("Shift for input: " + CTokenType.values()[lexerInput].toString());
         		System.err.println("The input is denied");
+				actions.add("Shift for input: " + CTokenType.values()[lexerInput].toString());
+				actions.add("The input is denied");
     			return null;
         	}
 
         	if (action > 0) {
-//        		showCurrentStateInfo(action);
-        		
         		//shift 操作
                 statusStack.push(action);
     			text = lexer.yytext;
@@ -96,6 +94,7 @@ public class LRStateTableParser {
     			
     			if (CTokenType.isTerminal(lexerInput)) {
     				System.out.println("Shift for input: " + CTokenType.values()[lexerInput].toString());
+					actions.add("Shift for input: " + CTokenType.values()[lexerInput].toString());
     				Object obj = takeActionForShift(lexerInput);
     				Node node=new Node(CTokenType.values()[lexerInput].toString()+"\\n"+text,lexerInput);
 					nodes.add(node);
@@ -109,17 +108,18 @@ public class LRStateTableParser {
         	} else {
         		if (action == 0) {
         			System.out.println("The input can be accepted");
+					actions.add("The input can be accepted");
         			return getResponse(nodes.get(0));
         		}
         		
         		int reduceProduction = - action;
         		Production product = ProductionManager.getProductionManager().getProductionByIndex(reduceProduction);
         		System.out.println("reduce by product: ");
-				product.print();
+        		actions.add("reduce by product: "+product.print());
+
 				lexerInput = product.getLeft();
 				treeList=new Nodes();
 				treeList.setName(CTokenType.values()[lexerInput].toString());
-				System.out.println(nodes.size());
         		takeActionForReduce(reduceProduction);
         		int rightSize = product.getRight().size();
         		while (rightSize > 0) {

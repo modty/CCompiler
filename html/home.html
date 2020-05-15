@@ -40,9 +40,9 @@
                                 <a href="javascript:void(0)"><i class="mdi mdi-palette"></i> 语法分析</a>
                                 <ul class="nav nav-subnav">
                                     <li> <a href="javascript:window.open('nfaDfa.html');">NFA--DFA</a> </li>
-                                    <li> <a href="javascript:window.open('ll1.html');">LL（1）预测分析</a> </li>
-                                    <li> <a href="javascript:window.open('sympol.html');">算符优先分析</a> </li>
-                                    <li> <a href="javascript:window.open('LRAnalysis.html');" onclick="javascript:LRAnalysis()">LR分析法</a> </li>
+                                    <li> <a style="cursor: pointer;" onclick="javascript:LL1Analysis()">LL（1）预测分析</a> </li>
+                                    <li> <a style="cursor: pointer;">算符优先分析</a> </li>
+                                    <li> <a style="cursor: pointer;" onclick="javascript:LRAnalysis()">LR分析法</a> </li>
                                 </ul>
                             </li>
                             <li class="nav-item nav-item-has-subnav">
@@ -221,9 +221,8 @@
 
             </header>
             <main class="lyear-layout-content">
-
                 <div class="container-fluid">
-                    <div class="row">
+                    <div class="row" style="margin-left: 2px;">
                         <div class="card">
                             <div class="form-group">
                                 <label class="col-xs-12" for="example-textarea-input">C代码编辑</label>
@@ -233,6 +232,7 @@
                                     </div>
                                     <input type="file" style="margin-top: 10px;" id="file" onchange='javascript:loadFile()'>
                                     <button class="btn btn-primary" style="margin-top: 20px;" onclick='javascript:setCode()'>确定</button>
+                                    <button class="btn btn-primary" style="margin-top: 20px;" onclick='javascript:analysis()'>开始分析</button>
                                 </div>
                                 <div class="col-xs-6">
                                     <table class="table table-bordered" id="errorTableHead">
@@ -253,24 +253,22 @@
                         </div>
                     </div>
                     <div id="functionCard">
-
                     </div>
-                </div>
 
             </main>
+            </div>
         </div>
-    </div>
-    <script type="text/javascript" src="js/jquery.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/perfect-scrollbar.min.js"></script>
-    <!--标签插件-->
-    <script src="js/jquery-tags-input/jquery.tagsinput.min.js"></script>
-    <script type="text/javascript" src="js/main.min.js"></script>
-    <script type="text/javascript" src="js/Chart.js"></script>
-    <script type="text/javascript" src="js/wangEditor.min.js"></script>
-    <script type="text/javascript" src="js/lightyear.js"></script>
-    <script src="js/bootstrap-notify.min.js"></script>
-    <script src="js/setting.js"></script>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/perfect-scrollbar.min.js"></script>
+        <!--标签插件-->
+        <script src="js/jquery-tags-input/jquery.tagsinput.min.js"></script>
+        <script type="text/javascript" src="js/main.min.js"></script>
+        <script type="text/javascript" src="js/Chart.js"></script>
+        <script type="text/javascript" src="js/wangEditor.min.js"></script>
+        <script type="text/javascript" src="js/lightyear.js"></script>
+        <script src="js/bootstrap-notify.min.js"></script>
+        <script src="js/setting.js"></script>
 </body>
 
 </html>

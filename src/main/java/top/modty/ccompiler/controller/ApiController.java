@@ -1,9 +1,15 @@
 package top.modty.ccompiler.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.bind.annotation.*;
-import top.modty.ccompiler.BottomUpParser;
+import top.modty.ccompiler.LL1.LL1Productions;
+import top.modty.ccompiler.LL1.TextLex;
+import top.modty.ccompiler.LL1.TextParse;
+import top.modty.ccompiler.Parser;
+import top.modty.ccompiler.commons.Word;
 import top.modty.ccompiler.commons.constants.Grammar;
 import top.modty.ccompiler.dfaNfa.ThompsonConstruction;
+import top.modty.ccompiler.grammar.ProductionManager;
 import top.modty.ccompiler.grammar.Symbols;
 import top.modty.ccompiler.lex.Lexer;
 import top.modty.ccompiler.semantic.LRStateTableParser;
@@ -20,7 +26,7 @@ import java.util.*;
 @CrossOrigin
 @RequestMapping("/api")
 public class ApiController {
-    BottomUpParser bottomUpParser=new BottomUpParser();
+    Parser parser =new Parser();
     Grammar grammar=new Grammar();
     String code;
     HashMap<String,String> macro;
@@ -29,35 +35,24 @@ public class ApiController {
     @PostMapping("/setCode")
     public void initial(HttpServletRequest request){
         this.code=request.getParameterMap().get("code")[0];
-        bottomUpParser.setLexer(new Lexer(code));
+        parser.setLexer(new Lexer(code));
     }
     @GetMapping("/lexMap")
     public Object lexMap(){
         Map<String,Object> response=new HashMap<>();
-        response.put("right",bottomUpParser.getLexer().getRecognizedMap());
-        System.out.println(response);
+        response.put("right", parser.getLexer().getRecognizedMap());
         return response;
     }
     @GetMapping("/grammer")
-    public HashMap<String, List<String>> grammer(){
-        return grammar.grammers;
+    public HashMap<String, List<String>> grammer(String key){
+        if("ll1".equals(key)){
+            return LL1Productions.getInstance().grammers;
+        }else {
+            return grammar.grammers;
+        }
     }
-    @GetMapping("/tree")
-    public HashMap<String, List<HashMap<String, Object>>> tree(){
-//        code="void main() {\n" +
-//                " int a;\n" +
-//                " int i;\n" +
-//                " if (i < 1){\n" +
-//                "   a = 1;\n" +
-//                " }\n" +
-//                " else if (i < 2){\n" +
-//                "   a = 2;\n" +
-//                " }\n" +
-//                " else {\n" +
-//                "   a = 3;\n" +
-//                "\n" +
-//                " }\n" +
-//                "}";
+    @GetMapping("/LRtree")
+    public JSONObject LRtree(){
         LRStateTableParser parser=null;
         HashMap<String, List<HashMap<String, Object>>> response=null;
         try{
@@ -66,19 +61,74 @@ public class ApiController {
             parser = new LRStateTableParser(lexer);
             System.out.println(code);
             response= parser.parse();
-//            HashMap<String, List<HashMap<String, Object>>> s=parser.parse();
-//            response=new HashMap<>();
-//            response.put("width",parser.times*10);
-//            response.put("height",parser.times*6);
-//            response.put("data",s);
         }catch (Exception e){
          e.printStackTrace();
         }finally {
             parser.clear();
-            return response;
+            JSONObject object=new JSONObject();
+            object.put("tree",response);
+            object.put("actions",parser.actions);
+            return object;
         }
     }
-
+    @GetMapping("/LL1tree")
+    public JSONObject LL1tree(){
+        code="int main(){\n" +
+                "   int a;\n" +
+                "   a=10;\n" +
+                "   if(a>0){\n" +
+                "       a=1;\n" +
+                "   }\n" +
+                "   else{\n" +
+                "       a=2;\n" +
+                "   }\n" +
+                "   while(a>0){\n" +
+                "       a=3;\n" +
+                "   }\n" +
+                "}";
+        TextLex textLex=new TextLex(code);
+        textLex.scannerAll();
+        // 获得结果的表
+        ArrayList<Word> lex_result_stack = textLex.get_Lex_Result();
+        ArrayList<HashMap<String, String>> lex_error_stack = textLex.get_Lex_Error();
+        // 若是存在词法分析错误
+        if(lex_error_stack.size()!=0){
+            return new JSONObject();
+        }
+        else {
+            // 句法分析
+            TextParse textParse = new TextParse(lex_result_stack);
+            JSONObject res=new JSONObject();
+            res.put("tree",textParse.Parsing());
+            res.put("actions",textParse.getActions());
+            return res;
+        }
+    }
+    @GetMapping("/sympolTree")
+    public HashMap<String,List<HashMap<String,Object>>> sympolTree(){
+        return null;
+    }
+    @GetMapping("/firstSympol")
+    public HashMap<String, ArrayList<String>> firstSympol(String key){
+        if("ll1".equals(key)){
+            return LL1Productions.getInstance().firsts;
+        }
+        return ProductionManager.getProductionManager().firstFollowSelectSetBuilder.getFirstSympol();
+    }
+    @GetMapping("/followSympol")
+    public HashMap<String,ArrayList<String>> followSympol(String key){
+        if("ll1".equals(key)){
+            return LL1Productions.getInstance().follows;
+        }
+        return ProductionManager.getProductionManager().firstFollowSelectSetBuilder.getFollowSympol();
+    }
+    @GetMapping("/selectSympol")
+    public HashMap<String,HashMap<String,ArrayList<String>>> selectSympol(String key){
+        if("ll1".equals(key)){
+            return LL1Productions.getInstance().predict;
+        }
+        return ProductionManager.getProductionManager().firstFollowSelectSetBuilder.getSelectSympol();
+    }
     @RequestMapping("/nfaDfaMacro")
     public boolean nfadfa(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();

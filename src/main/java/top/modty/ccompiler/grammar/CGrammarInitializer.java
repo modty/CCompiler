@@ -169,12 +169,9 @@ public class CGrammarInitializer {
 	public HashMap<Integer, Symbols> getSymbolMap() {
 		return symbolMap;
 	}
-	
 	public ArrayList<Symbols> getSymbolArray() {
 		return symbolArray;
 	}
-	
-	
 	private void initVariableDecalationProductions() {
 		
 		productionMap.clear();
@@ -328,7 +325,6 @@ public class CGrammarInitializer {
     	
 		
 	}
-	
 	private void initFunctionProductions() {
 		/*production num begin with 15
 		 * 
@@ -343,7 +339,6 @@ public class CGrammarInitializer {
 		 * TYPE_NT -> TYPE_SPECIFIER
 		 *            | TYPE TYPE_SPECIFIER
 		 */
-		
 		//EXT_DEF -> OPT_SPECIFIERS FUNCT_DECL SEMI(15)
 		ArrayList<Integer> right = null;
 		right = getProductionRight( new int[]{CTokenType.OPT_SPECIFIERS.ordinal(), CTokenType.FUNCT_DECL.ordinal(),
@@ -351,8 +346,7 @@ public class CGrammarInitializer {
 		Production production = new Production(productionNum,CTokenType.EXT_DEF.ordinal(),0, right);
 		productionNum++;
 		addProduction(production, false);
-		
-		
+
 		//FUNCT_DECL -> NEW_NAME LP VAR_LIST RP(16)
 		right = null;
 		right = getProductionRight( new int[]{CTokenType.NEW_NAME.ordinal(), CTokenType.LP.ordinal(),

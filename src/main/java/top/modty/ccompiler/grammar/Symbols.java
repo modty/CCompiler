@@ -2,6 +2,7 @@ package top.modty.ccompiler.grammar;
 import top.modty.ccompiler.commons.constants.CTokenType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Symbols {
@@ -9,7 +10,7 @@ public class Symbols {
     public  ArrayList<int[]> productions;
     public  ArrayList<Integer> firstSet = new ArrayList<Integer>();
     public  ArrayList<Integer> followSet = new ArrayList<Integer>();
-    public  ArrayList<ArrayList<Integer>> selectionSet = new ArrayList<ArrayList<Integer>>();
+    public HashMap<Integer, ArrayList<Integer>> selectionSet = new HashMap<>();
     
     public  boolean isNullable;
     

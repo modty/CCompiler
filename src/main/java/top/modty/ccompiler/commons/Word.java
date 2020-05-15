@@ -21,6 +21,11 @@ public class Word {
                 '}';
     }
 
+    public Word(String word,String mes) {
+        this.word = word;
+        this.mes=mes;
+    }
+
     public String getMes() {
         return mes;
     }

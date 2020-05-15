@@ -16,10 +16,10 @@ import java.util.List;
  * @date 2020-05-04 16:46
  * @mes
  */
-public class BottomUpParser {
+public class Parser {
     private String code;
     private Lexer lexer;
-    public BottomUpParser() {
+    public Parser() {
         BaseExecutor.isCompileMode = true;
         ProductionManager productionManager = ProductionManager.getProductionManager();
         // 初始化语法推导表达式
@@ -56,7 +56,7 @@ public class BottomUpParser {
         return lexer.getRecognizedMap();
     }
     public static void main(String[] args) {
-        BottomUpParser bottomUpParser=new BottomUpParser();
+        Parser bottomUpParser=new Parser();
         String code="\n" +
                 "void quicksort(int A[10], int p, int r) {\n" +
                 "    int x;\n" +
@@ -123,16 +123,15 @@ public class BottomUpParser {
 //                "   printf(\"value of x in myTag is %d\", myTag.x);\n" +
 //                "}";
         Lexer lexer=new Lexer(code);
-        lexer.getRecognizedMap().forEach(System.out::println);
-        LRStateTableParser parser = new LRStateTableParser(lexer);
+        LL1StateTableParser parser = new LL1StateTableParser(lexer.getRecognizedMap());
         HashMap<String, List<HashMap<String, Object>>> s=parser.parse();
-        ProgramGenerator generator = ProgramGenerator.getInstance();
-        generator.generateHeader();
-        CodeTreeBuilder treeBuilder = CodeTreeBuilder.getCodeTreeBuilder();
-        Intepretor intepretor = Intepretor.getIntepretor();
-        if (intepretor != null) {
-            intepretor.Execute(treeBuilder.getCodeTreeRoot());
-        }
-        generator.finish();
+//        ProgramGenerator generator = ProgramGenerator.getInstance();
+//        generator.generateHeader();
+//        CodeTreeBuilder treeBuilder = CodeTreeBuilder.getCodeTreeBuilder();
+//        Intepretor intepretor = Intepretor.getIntepretor();
+//        if (intepretor != null) {
+//            intepretor.Execute(treeBuilder.getCodeTreeRoot());
+//        }
+//        generator.finish();
     }
 }
