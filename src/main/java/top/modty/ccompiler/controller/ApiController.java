@@ -1,8 +1,11 @@
 package top.modty.ccompiler.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.bind.annotation.*;
 import top.modty.ccompiler.LL1.LL1Productions;
+import top.modty.ccompiler.LL1.LProduction;
 import top.modty.ccompiler.LL1.TextLex;
 import top.modty.ccompiler.LL1.TextParse;
 import top.modty.ccompiler.Parser;
@@ -13,6 +16,7 @@ import top.modty.ccompiler.grammar.ProductionManager;
 import top.modty.ccompiler.grammar.Symbols;
 import top.modty.ccompiler.lex.Lexer;
 import top.modty.ccompiler.semantic.LRStateTableParser;
+import top.modty.ccompiler.symbolFirst.SymbolFirstParser;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -32,6 +36,7 @@ public class ApiController {
     HashMap<String,String> macro;
     ArrayList<String> regularExpr;
     String strings;
+    SymbolFirstParser symbolFirstParser;
     @PostMapping("/setCode")
     public void initial(HttpServletRequest request){
         this.code=request.getParameterMap().get("code")[0];
@@ -109,23 +114,42 @@ public class ApiController {
         return null;
     }
     @GetMapping("/firstSympol")
-    public HashMap<String, ArrayList<String>> firstSympol(String key){
+    public Object firstSympol(String key){
         if("ll1".equals(key)){
             return LL1Productions.getInstance().firsts;
+        }else if("symbol".equals(key)){
+            return symbolFirstParser.firstVT;
         }
         return ProductionManager.getProductionManager().firstFollowSelectSetBuilder.getFirstSympol();
     }
+    @PostMapping("/setSymbolGrammer")
+    public void setSymbolGrammer(HttpServletRequest request){
+        ArrayList<LProduction> symbolGrammer=new ArrayList<>();
+
+        JSONArray array= JSONArray.parseArray(request.getParameterMap().get("code")[0]);
+        for(int i=0;i<array.size();i++){
+            String grammer=array.getString(i);
+            String[] ss=grammer.split("-->");
+            String[] ss1=ss[1].trim().split(" ");
+            symbolGrammer.add(new LProduction(ss[0].trim(),ss1));
+        }
+        symbolFirstParser=new SymbolFirstParser(symbolGrammer);
+    }
     @GetMapping("/followSympol")
-    public HashMap<String,ArrayList<String>> followSympol(String key){
+    public Object followSympol(String key){
         if("ll1".equals(key)){
             return LL1Productions.getInstance().follows;
+        }else if("symbol".equals(key)){
+            return symbolFirstParser.lastVT;
         }
         return ProductionManager.getProductionManager().firstFollowSelectSetBuilder.getFollowSympol();
     }
     @GetMapping("/selectSympol")
-    public HashMap<String,HashMap<String,ArrayList<String>>> selectSympol(String key){
+    public Object selectSympol(String key){
         if("ll1".equals(key)){
             return LL1Productions.getInstance().predict;
+        }else if("symbol".equals(key)){
+            return symbolFirstParser.selectTable;
         }
         return ProductionManager.getProductionManager().firstFollowSelectSetBuilder.getSelectSympol();
     }

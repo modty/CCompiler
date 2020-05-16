@@ -34,6 +34,10 @@ public class Word {
         this.mes = mes;
     }
 
+    public Word(String word) {
+        this.word = word;
+    }
+
     public Word(String word, int position, int type, String mes) {
         this.word = word;
         this.position = position;

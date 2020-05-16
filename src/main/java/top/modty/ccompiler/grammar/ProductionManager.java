@@ -7,12 +7,17 @@ import java.util.Map.Entry;
 public class ProductionManager {
 	
 	private static ProductionManager self = null;
-	
+	public int productionNum=0;
 	public FirstFollowSelectSetBuilder firstFollowSelectSetBuilder = new FirstFollowSelectSetBuilder();
 	
     private HashMap<Integer, ArrayList<Production>> productionMap = new HashMap<Integer, ArrayList<Production>>();
-    
-    public static ProductionManager getProductionManager() {
+
+
+	public HashMap<Integer, ArrayList<Production>> getProductionMap() {
+		return productionMap;
+	}
+
+	public static ProductionManager getProductionManager() {
     	if (self == null) {
     		self = new ProductionManager();
     	}
@@ -24,6 +29,7 @@ public class ProductionManager {
     	CGrammarInitializer cGrammarInstance =  CGrammarInitializer.getInstance();
     	
     	productionMap = cGrammarInstance.getProductionMap();
+    	productionNum=cGrammarInstance.productionNum;
     		
     }
     

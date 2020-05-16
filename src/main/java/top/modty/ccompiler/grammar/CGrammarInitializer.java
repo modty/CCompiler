@@ -131,7 +131,7 @@ public class CGrammarInitializer {
 	//DEF_LIST ->  DEF (28)
 	public static final int Def_To_DefList = 28;
 	
-	private int productionNum = 0;
+	public int productionNum = 0;
 	
 	
 	
@@ -646,8 +646,8 @@ public class CGrammarInitializer {
     	production = new Production(productionNum,CTokenType.LOCAL_DEFS.ordinal(),0, right);
     	productionNum++;
     	addProduction(production, false);
-    	
-    	
+
+
     	//EXPR -> NO_COMMA_EXPR(53)
     	right = getProductionRight( new int[]{CTokenType.NO_COMMA_EXPR.ordinal()});
     	production = new Production(productionNum,CTokenType.EXPR.ordinal(),0, right);

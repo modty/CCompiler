@@ -233,6 +233,15 @@ function initialFunctionCard(type) {
     if (type == "ll1") {
         html += '<div class="col-xs-12"><div class="left"><div class="card "><div class="card-header"><h2>Select集合</h2></div>' +
             '<div id="sectionSympolTables"></div></div></div></div>';
+    } else if (type == "symbol") {
+        html = '<div class="form-group"><div class="col-xs-4"><div class="left" id="grammerBody"><div class="card"><div class="card-header"><h2>语法</h2></div>' +
+            '<div class="card"><table class="table"><thead><tr><th>文法符号</th><th>集合</th></tr></thead><tbody id="grammerSympolBody"></tbody></table></div>' +
+            '</div></div></div><div class="col-xs-4"><div class="left"><div class="card"><div class="card-header"><h2>FirstVT集合</h2></div>' +
+            '<div class="card"><table class="table"><thead><tr><th>文法符号</th><th>集合</th></tr></thead><tbody id="firstSympolBody"></tbody></table></div>' +
+            '</div></div></div><div class="col-xs-4"><div class="left"><div class="card"><div class="card-header"><h2>FollowVT集合</h2></div><div class="card">' +
+            '<table class="table"><thead><tr><th>文法符号</th><th>集合</th></tr></thead><tbody id="followSympolBody"></tbody></table></div></div></div></div></div>';
+        html += '<div class="col-xs-12"><div class="left"><div class="card "><div class="card-header"><h2>Select集合</h2></div>' +
+            '<div id="sectionSympolTables"></div></div></div></div>';
     }
     functionCard.innerHTML = html;
 
@@ -287,10 +296,10 @@ function initialFollowSymbols(key) {
 }
 
 
-function initialSelectSymbols(key) {
+function initialSelectSymbols(typeKey) {
     var tables = document.getElementById("sectionSympolTables");
     var xml = new XMLHttpRequest();
-    xml.open('GET', 'http://localhost:8080/api/selectSympol?key=' + key, true);
+    xml.open('GET', 'http://localhost:8080/api/selectSympol?key=' + typeKey, true);
     xml.onreadystatechange = function() {
         if (xml.readyState == 4 && xml.status == 200) {
             var json = JSON.parse(xml.responseText);
@@ -308,6 +317,10 @@ function initialSelectSymbols(key) {
                 bodyHtml += "<tr>";
                 for (var key1 in json[key]) {
                     if (json[key][key1].length > 0) {
+                        if (typeKey == "symbol" && json[key][key1] == 0) {
+                            continue;
+                        }
+                        console.log(json[key][key1]);
                         headHtml += "<th>" + key1 + "</th>";
                         bodyHtml += "<td>";
                         for (var index in json[key][key1]) {
@@ -378,6 +391,15 @@ function initialGrammerSymbols(key) {
         }
     }
     xml.send();
+}
+
+function symbolAnalysis() {
+    currentAction = "symbol";
+    initialFunctionCard(currentAction);
+    initialFirstSymbols(currentAction);
+    initialFollowSymbols(currentAction);
+    initialGrammerSymbols("ll1");
+    initialSelectSymbols(currentAction);
 }
 
 function analysis() {
