@@ -131,7 +131,7 @@ public class UnaryNodeExecutor extends BaseExecutor implements IExecutorReceiver
 				System.exit(1);
 			}
     		break;
-    		
+    		// i++\i--此类结构支持
         case CGrammarInitializer.Unary_Incop_TO_Unary:
         case CGrammarInitializer.Unary_DecOp_TO_Unary:
         	symbol = (Symbol)root.getChildren().get(0).getAttribute(ICodeKey.SYMBOL);
@@ -168,8 +168,9 @@ public class UnaryNodeExecutor extends BaseExecutor implements IExecutorReceiver
         	child = root.getChildren().get(0);
         	copyChild(root, child);
         	break;
-        
+        // 指针操作内存
         case CGrammarInitializer.Start_Unary_TO_Unary:
+        	// 173-174 获取内存地址，然后查找出地址多对应的数据
         	child = root.getChildren().get(0); 
         	int addr = (Integer)child.getAttribute(ICodeKey.VALUE); //get mem addr
         	symbol = (Symbol)child.getAttribute(ICodeKey.SYMBOL);
@@ -192,7 +193,6 @@ public class UnaryNodeExecutor extends BaseExecutor implements IExecutorReceiver
         	//先获得函数名
         	boolean reEntry = false;
         	String funcName = (String)root.getChildren().get(0).getAttribute(ICodeKey.TEXT);
-        	//change here
         	/*
         	 * 如果函数名被记录过，那表明现在的函数调用其实是递归调用
         	 */
@@ -215,7 +215,6 @@ public class UnaryNodeExecutor extends BaseExecutor implements IExecutorReceiver
         	//找到函数执行树头节点
         	ICodeNode func = CodeTreeBuilder.getCodeTreeBuilder().getFunctionNodeByName(funcName);
         	if (func != null) {
-        		//change here push parameters before calling function 
         		/*
         		 * 函数调用时，把当前被调用的函数名记录下来，如果函数体内发送递归调用，那么编译器还会再次进入到
         		 * 这里，如果进入时判断到函数名跟我们这里存储的函数名一致，那表明发生了递归调用。
@@ -240,7 +239,6 @@ public class UnaryNodeExecutor extends BaseExecutor implements IExecutorReceiver
 			
 			        count++;
 		        }
-		        //problem here handle reentry
 		        if (BaseExecutor.isCompileMode == true && reEntry == false) {
 		        	/*
 		        	 * 在编译状态下，遇到函数自我递归调用则不需要再次为函数生成代码，只需要生成invoke指令即可
@@ -330,7 +328,6 @@ public class UnaryNodeExecutor extends BaseExecutor implements IExecutorReceiver
     		/*
     		 * 把读取结构体成员变量转换成对应的java汇编代码，也就是使用getfield指令把对应的成员变量的值读取出来，然后压入堆栈顶部
     		 */
-    		//TODO 需要区分结构体是否来自于结构体数组
     		if (args.getValue() != null) {
     			ProgramGenerator.getInstance().readValueFromStructMember(symbol, args);
     		}
@@ -370,7 +367,6 @@ public class UnaryNodeExecutor extends BaseExecutor implements IExecutorReceiver
 		try {
 			struct = (Symbol)declarator.getElement(idx);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (struct == null) {
@@ -380,7 +376,6 @@ public class UnaryNodeExecutor extends BaseExecutor implements IExecutorReceiver
 				//通过指令为数组中的某个下标处创建结构体实例
 				ProgramGenerator.getInstance().createInstanceForStructArray(symbol, idx);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

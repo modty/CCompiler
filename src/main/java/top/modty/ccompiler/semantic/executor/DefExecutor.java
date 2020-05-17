@@ -25,7 +25,7 @@ public class DefExecutor extends BaseExecutor {
 					    generator.createArray(symbol);
 				 }
 			 } else {
-				 //change here 遇到变量定义时，自动将其初始化为0
+				 //遇到变量定义时，自动将其初始化为0
 				 int i = generator.getLocalVariableIndex(symbol);
 				 generator.emit(Instruction.SIPUSH, ""+0);
 				 generator.emit(Instruction.ISTORE, ""+i);

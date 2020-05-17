@@ -3,7 +3,11 @@ package top.modty.ccompiler.semantic;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * @author 点木
+ * @date 2020-05-05 16:05
+ * @mes 模拟内存
+ */
 public class MemoryHeap {
 	private static int initAddr = 10000;
 	private static MemoryHeap instance = null;
@@ -16,7 +20,13 @@ public class MemoryHeap {
 	    
 	    return instance;
 	}
-	
+	/**
+	 * @author 点木
+	 * @date 2020/5/17
+	 * @return
+	 * @params 申请内存的大小
+	 * @mes
+	*/
 	public static int allocMem(int size) {
 		byte[] mem = new byte[size];
 		memMap.put(initAddr, mem);

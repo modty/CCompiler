@@ -28,16 +28,13 @@ public class StatementExecutor extends BaseExecutor {
 			 break;
 			 
 		 case CGrammarInitializer.FOR_OptExpr_Test_EndOptExpr_Statement_TO_Statement:
-			 //execute OptExpr
+			 //解析结点 OptExpr ，即初始化变量
 			 executeChild(root, 0);
 			 
 			 if (BaseExecutor.isCompileMode) {
 				 generator.emitLoopBranch();
 				 String branch = generator.getCurrentBranch();
 				 isLoopContinute(root, LoopType.FOR);
-				 /*   change here increase branch and loop in order to ensure that 
-				  *   if/else or loop contained in the loop body have correct branch count
-				  */
 				 generator.emitComparingCommand();
 				 String loop = generator.getLoopBranch();
 				 generator.increaseLoopCount();
@@ -53,7 +50,12 @@ public class StatementExecutor extends BaseExecutor {
 				 generator.emitString("\n" + branch + ":\n");
 				 
 			 }
-
+			 /* 执行的是执行树中第二个节点，也就是Test节点，
+			  * 对应的是for 语句中的中间循环判断语句，如果返回的结果不等于0，也就是循环条件满足，
+			  * 那么执行循环体内部的语句代码，也就是通过调用executeChild(root, 3);
+			  * 从而执行执最下面的Statement节点
+			  * 最后通过调用executeChild(root, 2); 执行EndOptExpr节点，对应于for循环，就是语句i++;
+			  */
 			 while(BaseExecutor.isCompileMode == false && isLoopContinute(root, LoopType.FOR)) {
 				 //execute statment in for body
 				 executeChild(root, 3);
@@ -104,11 +106,13 @@ public class StatementExecutor extends BaseExecutor {
 			 break;
 			 
 		 case  CGrammarInitializer.Return_Semi_TO_Statement:
+		 	// 函数return 告诉父结点不再执行return之后的代码
 			 isContinueExecution(false);
 			 
 			 break;
 			 
 		 case  CGrammarInitializer.Return_Expr_Semi_TO_Statement:
+		 	// 如果return后面有返回值，先执行返回值表达式
 			 node = executeChild(root, 0);
 			 Object obj = node.getAttribute(ICodeKey.VALUE);
 			 setReturnObj(obj);
@@ -124,7 +128,13 @@ public class StatementExecutor extends BaseExecutor {
 		 
 	     return root;
 	 }
-	 
+	 /**
+	  * @author 点木
+	  * @date 2020/5/17 
+	  * @return 
+	  * @params 
+	  * @mes
+	 */
 	 private boolean isLoopContinute(ICodeNode root, LoopType type) {
 		 ICodeNode res = null;
 		 if (type == LoopType.FOR || type == LoopType.DO_WHILE) {

@@ -17,6 +17,7 @@ public class LRStateTableParser {
 	int    enumVal = 0;
 	public int times=0;
 	String text = "";
+	// 变量首先被定义为全局变量
 	public static final String GLOBAL_SCOPE = "global";
 	public String symbolScope = GLOBAL_SCOPE;
 	public ArrayList<String> actions;

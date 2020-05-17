@@ -10,6 +10,11 @@ import top.modty.ccompiler.semantic.inter.IValueSetter;
 
 import java.util.ArrayList;
 
+/**
+ * @author 点木
+ * @date 2020-05-05 16:05
+ * @mes 函数
+ */
 public class ExtDefExecutor extends BaseExecutor {
     private ArrayList<Object> argsList = new ArrayList<Object>();
     ICodeNode root;
@@ -24,8 +29,9 @@ public class ExtDefExecutor extends BaseExecutor {
 			funcName = (String)child.getAttribute(ICodeKey.TEXT);
 			root.setAttribute(ICodeKey.TEXT, funcName);
 			saveArgs();
+			// 先执行FUNCT_DECL
 			executeChild(root, 0);
-			//problem here
+			// 执行大括号里面的
 			executeChild(root, 1);
 			Object returnVal = getReturnObj();
 			clearReturnObj();

@@ -302,6 +302,11 @@ public class Symbol implements IValueSetter {
     }
 
 	@Override
+	public String toString() {
+		return name;
+	}
+
+	@Override
 	public Symbol getSymbol() {
 		// TODO Auto-generated method stub
 		return this;

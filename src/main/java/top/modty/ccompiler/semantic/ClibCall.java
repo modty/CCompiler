@@ -12,7 +12,7 @@ import java.util.Set;
 /**
  * @author 点木
  * @date 2020-05-05 16:05
- * @mes C语言函数替换为Java函数替换
+ * @mes 实现C语言部分函数的API
  */
 public class ClibCall {
 	private Set<String> apiSet;

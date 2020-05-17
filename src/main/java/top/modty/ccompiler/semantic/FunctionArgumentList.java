@@ -2,7 +2,11 @@ package top.modty.ccompiler.semantic;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
+/**
+ * @author 点木
+ * @date 2020-05-05 16:05
+ * @mes 函数传递的参数类
+ */
 public class FunctionArgumentList {
     private static FunctionArgumentList argumentList = null;
     private ArrayList<Object> funcArgList = new ArrayList<Object>();

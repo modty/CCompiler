@@ -10,7 +10,11 @@ import top.modty.ccompiler.semantic.inter.IValueSetter;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
+/**
+ * @author 点木
+ * @date 2020-05-05 16:05
+ * @mes 实现由参数传递的函数调用
+ */
 public class FunctDeclExecutor extends BaseExecutor {
     private ArrayList<Object> argsList = null;
     private ICodeNode currentNode;
@@ -73,7 +77,6 @@ public class FunctDeclExecutor extends BaseExecutor {
 		argsList = FunctionArgumentList.getFunctionArgumentList().getFuncArgList(true);
 		Symbol eachSym = args;
 		int count = 0;
-		//change here
 		while (eachSym != null && eachSym.getDeclarator(Declarator.POINTER) != null) {
 			IValueSetter setter = (IValueSetter)eachSym;
 			try {
@@ -83,7 +86,6 @@ public class FunctDeclExecutor extends BaseExecutor {
 				setter.setValue(argsList.get(count));
 				count++;
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			

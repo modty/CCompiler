@@ -7,27 +7,32 @@ import top.modty.ccompiler.grammar.CGrammarInitializer;
 import top.modty.ccompiler.semantic.code.ProgramGenerator;
 import top.modty.ccompiler.semantic.Symbol;
 import top.modty.ccompiler.semantic.inter.ICodeNode;
-
+/**
+ * @author 点木
+ * @date 2020-05-05 16:05
+ * @mes BINARY结点
+ */
 public class BinaryExecutor extends BaseExecutor{
     @Override
     public Object Execute(ICodeNode root) {
+    	// 对孩子结点进行操作
     	executeChildren(root);
     	ProgramGenerator generator = ProgramGenerator.getInstance();
     	ICodeNode child;
     	int production = (int)root.getAttribute(ICodeKey.PRODUCTION);
     	int val1 = 0, val2 = 0;
+    	// 操作不同的结点对应的表达式
     	switch (production) {
     	case CGrammarInitializer.Uanry_TO_Binary:
     		
     		child = root.getChildren().get(0);
     		copyChild(root, child);
     		break;
-    		
     	case CGrammarInitializer.Binary_Plus_Binary_TO_Binary:
     	case CGrammarInitializer.Binary_DivOp_Binary_TO_Binary:
     	case CGrammarInitializer.Binary_Minus_Binary_TO_Binary:
     	case CGrammarInitializer.Binary_Start_Binary_TO_Binary:
-    		
+    		// 35--57：打印和生成Java字节码
     		BaseExecutor.resultOnStack = true;
     		if (root.getChildren().get(0).getAttribute(ICodeKey.VALUE) != null) {
     		    val1 = (Integer)root.getChildren().get(0).getAttribute(ICodeKey.VALUE);
@@ -50,13 +55,13 @@ public class BinaryExecutor extends BaseExecutor{
    		    } else {
    			   generator.emit(Instruction.SIPUSH, "" + val2);
    		    }
-
-    		
+   		    // 解释执行
     		if (production == CGrammarInitializer.Binary_Plus_Binary_TO_Binary) {
     			String text = root.getChildren().get(0).getAttribute(ICodeKey.TEXT) + " plus " + root.getChildren().get(1).getAttribute(ICodeKey.TEXT);
     			root.setAttribute(ICodeKey.VALUE, val1 + val2);	
     			root.setAttribute(ICodeKey.TEXT,  text);
-        		System.out.println(text + " is " + (val1+val2) );	
+        		System.out.println(text + " is " + (val1+val2) );
+        		// 添加字节码指令
         		ProgramGenerator.getInstance().emit(Instruction.IADD);
     		} else if (production ==  CGrammarInitializer.Binary_Minus_Binary_TO_Binary) {
     			String text = root.getChildren().get(0).getAttribute(ICodeKey.TEXT) + " minus " + root.getChildren().get(1).getAttribute(ICodeKey.TEXT);
@@ -78,7 +83,6 @@ public class BinaryExecutor extends BaseExecutor{
         				+ root.getChildren().get(1).getAttribute(ICodeKey.TEXT) + " and result is " + (val1/val2) );
         		ProgramGenerator.getInstance().emit(Instruction.IDIV);
     		}
-    		
     		root.setAttribute(ICodeKey.TEXT, "onstack");
     		
     		break;
@@ -119,10 +123,9 @@ public class BinaryExecutor extends BaseExecutor{
     		         int d = generator.getLocalVariableIndex(sym2);
 			         generator.emit(Instruction.ILOAD, "" + d);
     			 }
-
     		 }
     		 String branch = ProgramGenerator.getInstance().getCurrentBranch() + "\n";
-    		 
+    		 // 条件判断
     		 switch (operator) {
     		 case "==":
     			 root.setAttribute(ICodeKey.VALUE, val1 == val2 ? 1 : 0);
@@ -150,11 +153,7 @@ public class BinaryExecutor extends BaseExecutor{
     			 root.setAttribute(ICodeKey.VALUE, val1 != val2? 1 : 0);
     			 break;
     		 }
-    		 
-    		
     		 break;
-    		 
-    	
     	}
     	
     	return root;

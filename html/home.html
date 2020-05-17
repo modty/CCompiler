@@ -48,11 +48,13 @@
                             <li class="nav-item nav-item-has-subnav">
                                 <a href="javascript:void(0)"><i class="mdi mdi-palette"></i> 中间代码生成</a>
                                 <ul class="nav nav-subnav">
+                                    <li><a style="cursor: pointer;" onclick="javascript:intermediateCreate();">中间代码生成</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item nav-item-has-subnav">
                                 <a href="javascript:void(0)"><i class="mdi mdi-palette"></i>目标代码生成</a>
                                 <ul class="nav nav-subnav">
+                                    <li><a href="javascript:window.open('nfaDfa.html');">Java字节码生成生成</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -226,7 +228,7 @@
                         <div class="card">
                             <div class="form-group">
                                 <label class="col-xs-12" for="example-textarea-input">C代码编辑</label>
-                                <div class="col-xs-6">
+                                <div class="col-xs-6" id="codeInput">
                                     <div id="editor" escape="false">
                                         <p>请在此处编辑C语言代码...</p>
                                     </div>
@@ -234,7 +236,8 @@
                                     <button class="btn btn-primary" style="margin-top: 20px;" onclick='javascript:setCode()'>确定</button>
                                     <button class="btn btn-primary" style="margin-top: 20px;" onclick='javascript:analysis()'>开始分析</button>
                                 </div>
-                                <div class="col-xs-6">
+                                <div class="col-xs-6" id="rightSvg">
+
                                     <table class="table table-bordered" id="errorTableHead">
                                         <thead>
                                             <tr>

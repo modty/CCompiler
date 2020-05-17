@@ -242,6 +242,23 @@ function initialFunctionCard(type) {
             '<table class="table"><thead><tr><th>文法符号</th><th>集合</th></tr></thead><tbody id="followSympolBody"></tbody></table></div></div></div></div></div>';
         html += '<div class="col-xs-12"><div class="left"><div class="card "><div class="card-header"><h2>Select集合</h2></div>' +
             '<div id="sectionSympolTables"></div></div></div></div>';
+    } else if (type == "intermediate") {
+        html = "";
+        var file = document.getElementById('codeInput');
+        file.className = "col-xs-4";
+        var length = file.childNodes.length;
+        for (var i = 0; i < length - 2; i++) {
+            file.removeChild(file.childNodes[file.childNodes.length - 1]);
+        }
+        file.removeChild(file.firstChild);
+        var rightSvg = document.getElementById('rightSvg');
+        rightSvg.className = "col-xs-8"
+        rightSvg.innerHTML = '<svg id="svgCanvasNfa" style="width: 100%;height:750px;"></svg>';
+        var div = document.createElement('div');
+        div.className = "form-group";
+        div.innerHTML = '<div class="left" id="symbolTable"><h4>符号表</h4></div>';
+        file.appendChild(div);
+
     }
     functionCard.innerHTML = html;
 
@@ -427,4 +444,16 @@ function LRAnalysis() {
     initialFirstSymbols(currentAction);
     initialGrammerSymbols(currentAction);
     initialFollowSymbols(currentAction);
+}
+
+function intermediateCreate() {
+    initialFunctionCard('intermediate');
+}
+
+function initialSymbolTable() {
+
+}
+
+function initialCalculateTree() {
+
 }

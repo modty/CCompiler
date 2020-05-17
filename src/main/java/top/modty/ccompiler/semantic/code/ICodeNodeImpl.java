@@ -10,7 +10,7 @@ import java.util.*;
 public class ICodeNodeImpl extends HashMap<ICodeKey, Object> implements ICodeNode {
     private CTokenType type;
     private  ICodeNode parent;
-    private  ArrayList<ICodeNode> children;
+    public  ArrayList<ICodeNode> children;
     String   name;
     private  boolean isChildrenReverse = false;
     
@@ -48,7 +48,6 @@ public class ICodeNodeImpl extends HashMap<ICodeKey, Object> implements ICodeNod
 
 	@Override
 	public ICodeNode getParent() {
-		// TODO Auto-generated method stub
 		return parent;
 	}
 
@@ -57,7 +56,6 @@ public class ICodeNodeImpl extends HashMap<ICodeKey, Object> implements ICodeNod
 		//注意，有可能会改变原有逻辑
 		reverseChildren();
 		
-		// TODO Auto-generated method stub
 		return children;
 	}
 

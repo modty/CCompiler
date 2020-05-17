@@ -170,7 +170,7 @@ public class CodeTreeBuilder {
     			node.addChild(codeNodeStack.pop());	
     		}
     		break;
-    		
+    		// 执行FOR语句
     	case CGrammarInitializer.FOR_OptExpr_Test_EndOptExpr_Statement_TO_Statement:
     		node = ICodeFactory.createICodeNode(CTokenType.STATEMENT);
     		node.addChild(codeNodeStack.pop());
@@ -184,18 +184,18 @@ public class CodeTreeBuilder {
     		node.addChild(codeNodeStack.pop());
     		node.addChild(codeNodeStack.pop());
     		break;
- 
+    		// 构造IF-ELSE执行树：执行IF的判断条件
     	case CGrammarInitializer.Expr_TO_Test:
     		node = ICodeFactory.createICodeNode(CTokenType.TEST);
     		node.addChild(codeNodeStack.pop());
     		break;
-    		
+			// 构造IF-ELSE执行树：只有IF情况
     	case CGrammarInitializer.If_Test_Statement_TO_IFStatement:
     		node = ICodeFactory.createICodeNode(CTokenType.IF_STATEMENT);
     		node.addChild(codeNodeStack.pop()); //Test
     		node.addChild(codeNodeStack.pop()); //Statement
     		break;
-    		
+			// 构造IF-ELSE执行树：IF ELSE全部存在
     	case CGrammarInitializer.IfElseStatemnt_Else_Statemenet_TO_IfElseStatement:
     		node = ICodeFactory.createICodeNode(CTokenType.IF_ELSE_STATEMENT);
     		node.addChild(codeNodeStack.pop()); //IfStatement
@@ -226,7 +226,7 @@ public class CodeTreeBuilder {
     		node = ICodeFactory.createICodeNode(CTokenType.COMPOUND_STMT);
     		node.addChild(codeNodeStack.pop());
     		break;
-    		
+    		// 函数支持
     	case CGrammarInitializer.NewName_LP_RP_TO_FunctDecl:
     	case CGrammarInitializer.NewName_LP_VarList_RP_TO_FunctDecl:
     		node = ICodeFactory.createICodeNode(CTokenType.FUNCT_DECL);
@@ -264,7 +264,7 @@ public class CodeTreeBuilder {
     		node.addChild(codeNodeStack.pop());
     		node.addChild(codeNodeStack.pop());
     		break;
-    		
+    		// 处理函数返回
     	case CGrammarInitializer.Return_Semi_TO_Statement:
     		node = ICodeFactory.createICodeNode(CTokenType.STATEMENT);
     		break;

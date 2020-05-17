@@ -125,12 +125,16 @@ public class ApiController {
     @PostMapping("/setSymbolGrammer")
     public void setSymbolGrammer(HttpServletRequest request){
         ArrayList<LProduction> symbolGrammer=new ArrayList<>();
+        String[] grammers=request.getParameterMap().get("code")[0].split("\n");
+        for(int i=0;i<grammers.length;i++){
 
-        JSONArray array= JSONArray.parseArray(request.getParameterMap().get("code")[0]);
-        for(int i=0;i<array.size();i++){
-            String grammer=array.getString(i);
+            String grammer=grammers[i];
             String[] ss=grammer.split("-->");
             String[] ss1=ss[1].trim().split(" ");
+            for(int j=0;j<ss1.length;j++) ss1[j]=ss1[j].trim();
+            if(i==0){
+                symbolGrammer.add(new LProduction("START",new String[]{"#",ss[0].trim(),"#"}));
+            }
             symbolGrammer.add(new LProduction(ss[0].trim(),ss1));
         }
         symbolFirstParser=new SymbolFirstParser(symbolGrammer);
@@ -152,6 +156,16 @@ public class ApiController {
             return symbolFirstParser.selectTable;
         }
         return ProductionManager.getProductionManager().firstFollowSelectSetBuilder.getSelectSympol();
+    }
+    @PostMapping("/symbolAnalysis")
+    public Object symbolAnalysis(HttpServletRequest request){
+        List<Word> words=new ArrayList<>();
+        String[] ss=request.getParameterMap().get("code")[0].trim().split(" ");
+        for(int i=0;i<ss.length;i++){
+            words.add(new Word(ss[i].trim()));
+        }
+        words.add(new Word("#"));
+        return symbolFirstParser.analy_input_string(words);
     }
     @RequestMapping("/nfaDfaMacro")
     public boolean nfadfa(HttpServletRequest request) throws Exception {

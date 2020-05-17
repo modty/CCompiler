@@ -3,7 +3,11 @@ package top.modty.ccompiler.semantic.executor;
 import top.modty.ccompiler.commons.constants.ICodeKey;
 import top.modty.ccompiler.semantic.code.ProgramGenerator;
 import top.modty.ccompiler.semantic.inter.ICodeNode;
-
+/**
+ * @author 点木
+ * @date 2020-05-05 16:05
+ * @mes 包含 ELSE的执行器
+ */
 public class ElseStatementExecutor extends BaseExecutor {
     private ProgramGenerator generator = ProgramGenerator.getInstance();
 	@Override
@@ -23,7 +27,6 @@ public class ElseStatementExecutor extends BaseExecutor {
 		 if (generator.getIfElseEmbedCount() == 0) {
 			 generator.increaseBranch();
 		 }*/
-		 //change here
 		 generator.increaseBranch();
 		 
     	 Object obj = res.getAttribute(ICodeKey.VALUE);

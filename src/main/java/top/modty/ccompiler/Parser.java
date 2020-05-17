@@ -112,26 +112,24 @@ public class Parser {
                 "    }\n" +
                 "   \n" +
                 "}";
-//        code="struct CTag {\n" +
-//                "    int x;\n" +
-//                "    char c;\n" +
-//                "};\n" +
+//        code="void f() {\n" +
+//                "   int b ;\n" +
+//                "   int a[3];\n" +
 //                "\n" +
-//                "void main() {\n" +
-//                "   struct CTag myTag;\n" +
-//                "   myTag.x = 1;\n" +
-//                "   printf(\"value of x in myTag is %d\", myTag.x);\n" +
+//                "   a[0] = 1;\n" +
+//                "   a[1] = 2;\n" +
+//                "   b = a[0] + a[1];\n" +
 //                "}";
         Lexer lexer=new Lexer(code);
-        LL1StateTableParser parser = new LL1StateTableParser(lexer.getRecognizedMap());
+        LRStateTableParser parser = new LRStateTableParser(lexer);
         HashMap<String, List<HashMap<String, Object>>> s=parser.parse();
-//        ProgramGenerator generator = ProgramGenerator.getInstance();
-//        generator.generateHeader();
-//        CodeTreeBuilder treeBuilder = CodeTreeBuilder.getCodeTreeBuilder();
-//        Intepretor intepretor = Intepretor.getIntepretor();
-//        if (intepretor != null) {
-//            intepretor.Execute(treeBuilder.getCodeTreeRoot());
-//        }
-//        generator.finish();
+        ProgramGenerator generator = ProgramGenerator.getInstance();
+        generator.generateHeader();
+        CodeTreeBuilder treeBuilder = CodeTreeBuilder.getCodeTreeBuilder();
+        Intepretor intepretor = Intepretor.getIntepretor();
+        if (intepretor != null) {
+            intepretor.Execute(treeBuilder.getCodeTreeRoot());
+        }
+        generator.finish();
     }
 }
